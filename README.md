@@ -64,11 +64,10 @@ It **protects the system when assumptions behind the PID design are violated**.
 | Plant |
 | (Continuous-time dynamics) |
 +-----------------------------+
+```
+---
 
-
--```--
-
-## Instability Indicators (Examples)
+# Instability Indicators (Examples)
 
 The FSM monitors observable signals such as:
 
