@@ -1,9 +1,9 @@
-title: "AITL Silicon Pathway"
-description: "Educational project exploring the AITL control architecture and its silicon implementation pipeline."
+title: "intersample-supervisory-control"
+description: "  "
 lang: en
 
 url: "https://samizo-aitl.github.io"
-baseurl: "/aitl-silicon-pathway"
+baseurl: "/intersample-supervisory-control"
 
 # NO THEME — custom layout only
 theme: null
