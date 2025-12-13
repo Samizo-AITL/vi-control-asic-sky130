@@ -1,3 +1,9 @@
+---
+layout: default
+title: Documentation Index
+nav_order: 1
+---
+
 # intersample-supervisory-control
 
 Supervisory FSM design for discrete-time control instability caused by intersample disturbances and sampling-period variations.
