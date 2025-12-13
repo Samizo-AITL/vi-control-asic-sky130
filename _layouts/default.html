@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: 'en' }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{{ page.title | default: site.title | escape }}</title>
+  <meta name="description" content="{{ page.description | default: site.description }}">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{ '/assets/css/aitl.css' | relative_url }}">
+
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+  <!-- Mermaid -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script> mermaid.initialize({ startOnLoad: true }); </script>
+</head>
+
+<body class="aitl-root">
+
+  <header class="page-header">
+    <div class="wrapper">
+      <h1 class="site-title">
+        <a href="{{ '/' | relative_url }}">{{ site.title }}</a>
+      </h1>
+      <p class="site-description">{{ site.description }}</p>
+    </div>
+  </header>
+
+  <main class="wrapper main-container">
+    {{ content }}
+  </main>
+
+  <footer class="page-footer">
+    <div class="wrapper">
+      <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }}.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
