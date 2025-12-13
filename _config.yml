@@ -1,0 +1,14 @@
+title: "AITL Silicon Pathway"
+description: "Educational project exploring the AITL control architecture and its silicon implementation pipeline."
+lang: en
+
+url: "https://samizo-aitl.github.io"
+baseurl: "/aitl-silicon-pathway"
+
+# NO THEME — custom layout only
+theme: null
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
