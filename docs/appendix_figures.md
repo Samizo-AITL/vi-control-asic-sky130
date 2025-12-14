@@ -1,3 +1,11 @@
+---
+layout: default
+title: "Appendix A: Figure List"
+nav_order: 99
+parent: "Documentation"
+permalink: /docs/appendix_figures/
+---
+
 # Appendix A: Figure List
 
 This appendix provides a complete index of all figures used in this documentation.  
