@@ -3,6 +3,7 @@ layout: default
 title: "RTL PID Core"
 nav_order: 4
 parent: "Documentation"
+permalink: /docs/03_rtl_pid/
 ---
 
 # 🧩 RTL PID Core Implementation
