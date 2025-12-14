@@ -3,6 +3,7 @@ layout: default
 title: "FSM Supervisor & PWM Generator"
 nav_order: 5
 parent: "Documentation"
+permalink: /docs/04_fsm_pwm/
 ---
 
 # 🧠 FSM Supervisor & PWM Generator
