@@ -93,3 +93,11 @@ Therefore, no waveform figures are provided for this phase.
   - intermediate inspection vs. final results.
 - This appendix serves as a **figure index** for reviewers and readers.
 - All verification steps follow a staged and reproducible ASIC design flow.
+
+---
+
+## ⬅️ Navigation
+
+- 🔙 **[Documentation Index](index.md)**  
+- 🏠 **[Project Top](../index.md)**
+
