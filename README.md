@@ -27,29 +27,35 @@ The project is designed as both:
 
 Read the documents in the following order:
 
-1. **Overview**  
+1. **Documentation Home (docs/README / index)**  
+   👉 [Documentation Index](docs/index.md)
+  
+2. **Overview**  
    👉 [Overview](docs/00_overview.md)  
    System concept, motivation, and design philosophy.
 
-2. **Control Model**  
+3. **Control Model**  
    👉 [Control Model](docs/01_control_model.md)  
    Discrete-time PID control using V–I feedback.
 
-3. **Fixed-Point Design**  
+4. **Fixed-Point Design**  
    👉 [Fixed-Point Design](docs/02_fixed_point.md)  
    Signal normalization, Q-format selection, saturation.
 
-4. **RTL PID Core**  
+5. **RTL PID Core**  
    👉 [RTL PID Core](docs/03_rtl_pid.md)  
    Mapping equations directly into Verilog RTL.
 
-5. **FSM Supervisor & PWM Generator**  
+6. **FSM Supervisor & PWM Generator**  
    👉 [FSM Supervisor & PWM Generator](docs/04_fsm_pwm.md)  
    Safety supervision and pulse generation.
 
-6. **OpenLane Flow**  
+7. **OpenLane Flow**  
    👉 [OpenLane Flow](docs/05_openlane_flow.md)  
    RTL → GDS implementation using OpenLane.
+
+8. **Appendix A: Figure List**  
+   👉 [Appendix A – Figure List](docs/appendix_figures.md)
 
 ---
 
