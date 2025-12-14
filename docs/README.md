@@ -83,6 +83,22 @@ Synthesis, place & route, STA, and layout inspection.
 
 ---
 
+## 📎 Appendix
+
+For a complete index of all figures used in this documentation  
+(including verification waveforms, layout images, and GDS views), see:
+
+➡️ **[Appendix A: Figure List](appendix_figures.md)**
+
+This appendix clarifies:
+- What each figure represents
+- Which verification phase it belongs to
+- Why similar-looking figures exist (comparison / stepwise validation)
+
+It is recommended to consult the appendix when reviewing waveforms or layouts.
+
+---
+
 ## ✅ Verification Strategy
 
 This project focuses on **functional correctness at RTL level**:
