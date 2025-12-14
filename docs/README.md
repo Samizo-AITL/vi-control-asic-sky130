@@ -1,10 +1,3 @@
----
-layout: default
-title: "Documentation"
-nav_order: 1
-has_children: true
----
-
 # 📘 V–I Control ASIC Documentation
 
 Welcome to the documentation for **V–I Control ASIC on SKY130**.
