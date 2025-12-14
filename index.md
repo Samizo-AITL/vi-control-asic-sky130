@@ -53,6 +53,202 @@ The project is designed as both:
 ## 🎯 Project Goals
 
 - Provide a **step-by-step ASIC design example**:
+```
+Control Theory → Fixed-Point Design → RTL → OpenLane → GDS
+```
+- Demonstrate why **ASIC-based control** is superior to MCU-based control:
+- Deterministic timing (no interrupts)
+- Stable control period
+- Reproducible behavior
+- Clear safety logic
+
+- Serve as a **foundation教材** for:
+- Digital control engineers
+- ASIC / VLSI beginners
+- Industrial control applications
+
+---
+
+## 📁 Repository Structure
+
+```text
+vi-control-asic-sky130/
+├─ README.md                # This file
+├─ docs/                    # Educational documents (Markdown)
+│  ├─ 00_overview.md
+│  ├─ 01_control_model.md
+│  ├─ 02_fixed_point.md
+│  ├─ 03_rtl_pid.md
+│  ├─ 04_fsm_pwm.md
+│  └─ 05_openlane_flow.md
+│
+├─ rtl/                     # Verilog RTL
+│  ├─ pid_core.v
+│  ├─ fsm_controller.v
+│  ├─ pwm_gen.v
+│  ├─ reg_if_spi.v
+│  └─ top.v
+│
+├─ sim/                     # Testbenches
+│
+├─ openlane/                # OpenLane configuration
+│
+└─ scripts/                 # Utility scripts (fixed-point, etc.)
+```
+
+## 🧮 Control Model (Overview)
+
+The discrete-time PID control law implemented in this project is:
+
+$$
+u[n] = K_p e[n] + K_i \sum_{k=0}^{n} e[k] + K_d \left(e[n] - e[n-1]\right)
+$$
+
+where:
+
+- $e[n]$ : control error at sample $n$
+- $u[n]$ : control output (PWM duty or timing command)
+- $K_p$  : proportional gain
+- $K_i$  : integral gain
+- $K_d$  : derivative gain
+
+### Error Definition (V–I Based)
+
+The error $e[n]$ is defined using **Voltage–Current (V–I) feedback**.
+The exact definition depends on the target system, but a typical form is:
+
+$$
+e[n] = V_{\text{ref}}[n] - V[n]
+$$
+
+or, when current feedback is required:
+
+$$
+e[n] = f\big(V[n], I[n]\big)
+$$
+
+where:
+
+- $V[n]$ : measured voltage (digital sample)
+- $I[n]$ : measured current (digital sample)
+
+All voltage and current values are assumed to be converted
+to digital form by **external ADCs**.
+
+---
+
+## 🔢 Fixed-Point Arithmetic
+
+All control computations are implemented using **fixed-point arithmetic**.
+
+### Design Principles
+
+- Deterministic latency
+- Saturation instead of wrap-around
+- Explicit bit-width control
+- Hardware-friendly implementation
+
+A typical Q-format is:
+
+- Voltage $V[n]$ : Qm.n
+- Current $I[n]$ : Qm.n
+- Control output $u[n]$ : Qp.q
+
+Overflow and underflow are handled using **saturation logic**.
+
+---
+
+## 🧠 Control Architecture
+
+The control core consists of the following digital blocks:
+
+- **PID Core**  
+  Computes $u[n]$ from $e[n]$ using fixed-point arithmetic.
+
+- **FSM Supervisor**  
+  Controls operating modes:
+  - `INIT`
+  - `RUN`
+  - `FAULT`
+
+- **PWM Generator**  
+  Converts $u[n]$ into duty-cycle or timing signals.
+
+- **Register Interface**  
+  Allows gain parameters and status to be accessed via SPI or GPIO.
+
+All blocks operate on a **single deterministic control clock**.
+
+---
+
+## ⏱ Deterministic Timing
+
+Unlike MCU-based control systems:
+
+- No interrupts
+- No task scheduling
+- No jitter caused by software execution
+
+Each control cycle executes in a **fixed number of clock cycles**,
+making the system suitable for safety-critical and industrial applications.
+
+---
+
+## 🛠 Technology Stack
+
+- **Process**: SkyWater SKY130 (130 nm)
+- **EDA Flow**: OpenLane (RTL → GDS)
+- **HDL**: Verilog
+- **Design Style**: Fully synchronous, single-clock
+- **Target**: Digital-only ASIC (no on-chip ADC/DAC)
+
+---
+
+## 📘 Educational Philosophy
+
+This project intentionally avoids:
+
+- High-performance AI accelerators
+- Complex mixed-signal integration
+- Black-box IP dependencies
+
+Instead, it focuses on:
+
+- Transparency
+- Explainability
+- Reproducibility
+- One-to-one mapping between equations and RTL
+
+Every register, multiplier, and FSM transition
+can be traced directly back to the control equations.
+
+---
+
+## 🚀 Intended Audience
+
+This repository is suitable for:
+
+- Students learning digital control and VLSI
+- Engineers moving from MCU-based control to ASICs
+- Educators building hands-on semiconductor教材
+- Developers evaluating OpenLane + SKY130 workflows
+
+---
+
+## 📌 Project Status
+
+- [ ] Control model definition
+- [ ] Fixed-point format selection
+- [ ] RTL implementation
+- [ ] OpenLane synthesis
+- [ ] Place & Route
+- [ ] GDS generation
+
+---
+
+**Start with the control model.  
+Understand the equations.  
+Then build the silicon.**
 
 ---
 
