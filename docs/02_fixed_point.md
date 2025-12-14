@@ -1,0 +1,194 @@
+---
+layout: default
+title: "Fixed-Point Design"
+nav_order: 3
+parent: "Documentation"
+---
+
+# 🔢 Fixed-Point Design for V–I Control
+
+This chapter explains how **continuous-valued control equations**
+are mapped into **fixed-point arithmetic** suitable for a
+**deterministic digital ASIC implementation**.
+
+All voltage **V** and current **I** signals are treated explicitly
+as fixed-point numbers.
+
+---
+
+## 🎯 Why Fixed-Point?
+
+Floating-point arithmetic is avoided in this design because:
+
+- Hardware cost is high
+- Latency is variable
+- Verification becomes complex
+
+Fixed-point arithmetic provides:
+
+- Deterministic execution time
+- Predictable overflow behavior
+- Efficient hardware implementation
+
+These properties are essential for **control and safety-critical systems**.
+
+---
+
+## 📐 Signal Normalization (V–I)
+
+Before entering the control core, all physical signals are normalized.
+
+### Voltage
+
+Let the physical voltage range be:
+
+$$
+0 \le V_{\text{phys}} \le V_{\text{max}}
+$$
+
+The normalized digital voltage is:
+
+$$
+V[n] = \frac{V_{\text{phys}}}{V_{\text{max}}}
+$$
+
+### Current
+
+Similarly, for current:
+
+$$
+0 \le I_{\text{phys}} \le I_{\text{max}}
+$$
+
+$$
+I[n] = \frac{I_{\text{phys}}}{I_{\text{max}}}
+$$
+
+After normalization:
+
+- $V[n] \in [0, 1]$
+- $I[n] \in [0, 1]$
+
+---
+
+## 🧮 Q-Format Representation
+
+A fixed-point number is represented as:
+
+$$
+x = \text{integer} \times 2^{-f}
+$$
+
+where:
+
+- $f$ : number of fractional bits
+
+### Example: Q1.15 Format
+
+- Total bits: 16
+- Integer bits: 1
+- Fractional bits: 15
+
+Range:
+
+$$
+-1.0 \le x < +1.0
+$$
+
+Resolution:
+
+$$
+\Delta = 2^{-15}
+$$
+
+This format is suitable for normalized V and I signals.
+
+---
+
+## ⚙️ Fixed-Point PID Computation
+
+The discrete-time PID equation:
+
+$$
+u[n] = K_p e[n] + K_i \sum e[n] + K_d (e[n] - e[n-1])
+$$
+
+is implemented using fixed-point multipliers and adders.
+
+### Gain Representation
+
+- $K_p, K_i, K_d$ are also represented in fixed-point
+- Gains are stored in programmable registers
+
+Care must be taken to allocate sufficient bit width
+for intermediate results.
+
+---
+
+## 🚨 Saturation and Overflow Handling
+
+Unlike software, hardware must explicitly handle overflow.
+
+### Saturation Logic
+
+If a computed value exceeds the allowed range:
+
+- Positive overflow → clamp to maximum
+- Negative overflow → clamp to minimum
+
+This prevents wrap-around behavior,
+which can destabilize control systems.
+
+---
+
+## 📊 Bit-Width Planning (Example)
+
+| Signal | Format | Notes |
+|------|-------|------|
+| $V[n]$, $I[n]$ | Q1.15 | Normalized input |
+| $e[n]$ | Q2.15 | Signed error |
+| $\sum e[n]$ | Q4.15 | Accumulated integral |
+| $u[n]$ | Q2.15 | Control output |
+
+These values are examples and may be adjusted
+based on dynamic range requirements.
+
+---
+
+## ⏱ Deterministic Latency
+
+Each fixed-point operation:
+
+- Uses a known number of clock cycles
+- Has no data-dependent timing
+
+Therefore, the total control latency is:
+
+$$
+T_{\text{latency}} = N_{\text{cycles}} \times T_{\text{clk}}
+$$
+
+This property is critical for stable control.
+
+---
+
+## 🧪 Verification Strategy
+
+To verify fixed-point behavior:
+
+- Compare fixed-point results with floating-point reference models
+- Test saturation and overflow cases explicitly
+- Use waveform inspection to confirm bit growth
+
+Scripts in `scripts/` can assist in analyzing quantization effects.
+
+---
+
+## ➡️ Next
+
+Proceed to:
+
+- [`RTL PID Core`](03_rtl_pid.md)
+
+After understanding fixed-point arithmetic,
+the hardware implementation becomes straightforward.
