@@ -9,39 +9,50 @@ parent: "Documentation"
 **V–I Control ASIC on SKY130**
 
 This project demonstrates how a **Voltage–Current (V–I) based control system**
-can be implemented as a **fully digital ASIC**, using
+can be implemented as a **fully digital ASIC**, using  
 **OpenLane** and **SkyWater SKY130**.
 
-The focus is on **clarity, determinism, and educational value**.
+The emphasis is on:
+
+- clarity of design intent
+- deterministic timing
+- educational transparency
+
+This is not just a result-oriented project,  
+but a **process-oriented design record**.
 
 ---
 
 ## 🎯 What This Project Is
 
-This repository is:
+This repository serves as:
 
 - 📘 A **step-by-step educational guide**
-- 🧩 A **practical control ASIC reference design**
-- 🛠 A **complete RTL-to-GDS example** using open-source tools
+- 🧩 A **practical digital control ASIC reference**
+- 🛠 A **complete RTL-to-GDS implementation example** using open-source tools
 
-You will see how:
+You will see, end to end, how:
 
-> **Control theory becomes fixed-point math,  
-> fixed-point math becomes RTL,  
-> and RTL becomes silicon.**
+> **Control theory becomes fixed-point math,**  
+> **fixed-point math becomes RTL,**  
+> **and RTL becomes silicon.**
+
+Every abstraction layer is explicitly connected to the next.
 
 ---
 
 ## ❌ What This Project Is NOT
 
-To keep the scope clear, this project is **not**:
+To keep the scope focused and realistic, this project is **not**:
 
-- A high-performance AI accelerator
+- A high-performance AI or DSP accelerator
 - A mixed-signal SoC with on-chip ADC/DAC
-- A vendor-specific MCU example
+- A vendor-specific MCU or firmware example
 
-All **analog functions** (ADC, DAC, current sensing)
-are intentionally kept **off-chip**.
+All **analog functions** (ADC, DAC, current sensing) are intentionally
+kept **off-chip**.
+
+The ASIC focuses purely on **deterministic digital control logic**.
 
 ---
 
@@ -49,7 +60,7 @@ are intentionally kept **off-chip**.
 
 The control system operates on two physical quantities:
 
-- **Voltage (V)**  
+- **Voltage (V)**
 - **Current (I)**
 
 These are sampled by external ADCs and provided to the ASIC
@@ -58,13 +69,21 @@ as **digital fixed-point values**:
 - $V[n]$ : voltage sample  
 - $I[n]$ : current sample  
 
-The ASIC computes a control output:
+The ASIC computes a discrete-time control output:
 
-- $u[n]$ : control command → PWM duty or timing
+- $u[n]$ : control command  
+  → used as PWM duty or timing information
+
+This makes the control loop:
+
+- synchronous
+- cycle-accurate
+- fully analyzable in hardware terms
 
 ---
 
-## 🧩 Target Architecture
+## 🧩 Target Architecture (Conceptual)
+
 ```
 V[n], I[n]
 │
@@ -85,26 +104,27 @@ V[n], I[n]
 ```
 
 
-This structure ensures:
+This separation ensures:
 
 - Deterministic timing
 - Explicit safety handling
-- Clear separation of responsibilities
+- Clear responsibility per block
 
 ---
 
 ## ⏱ Why ASIC-Based Control?
 
-Compared with MCU-based control:
+Compared with MCU-based control approaches:
 
-| MCU | ASIC (This Project) |
+| MCU-based Control | ASIC-based Control (This Project) |
 |---|---|
 | Interrupt-driven | Fully synchronous |
 | Variable latency | Deterministic latency |
-| Software hidden states | Explicit hardware states |
-| Difficult timing analysis | Exact cycle count |
+| Software-hidden states | Explicit FSM states |
+| Hard to prove timing | Exact cycle count |
 
-For **industrial and safety-oriented control**, determinism matters.
+For **industrial and safety-oriented control**,  
+*determinism and explainability matter more than raw flexibility*.
 
 ---
 
@@ -114,36 +134,36 @@ For **industrial and safety-oriented control**, determinism matters.
 - **EDA Flow**: OpenLane
 - **Design Style**: Digital-only, single clock
 - **Language**: Verilog HDL
-- **Arithmetic**: Fixed-point
+- **Arithmetic**: Fixed-point (Q-format)
 
-All designs in this repository are compatible
-with the open-source SKY130 PDK.
+All RTL and flows are compatible with the open-source SKY130 PDK.
 
 ---
 
-## 📚 How This Documentation Is Organized
+## 📚 Documentation Roadmap
 
-The documentation is structured into **six chapters**:
+The documentation progresses in the following order:
 
 1. **Overview**  
-   System concept and motivation
+   System concept and motivation (this chapter)
 
 2. **Control Model**  
-   Discrete-time PID control using V–I feedback
+   Discrete-time PID equations using V–I feedback
 
 3. **Fixed-Point Design**  
-   Normalization, Q-format, saturation
+   Scaling, Q-format selection, saturation
 
 4. **RTL PID Core**  
    Verilog implementation of the control law
 
 5. **FSM & PWM**  
-   Supervision, safety, and pulse generation
+   Supervision, safety logic, pulse generation
 
 6. **OpenLane Flow**  
-   RTL → GDS implementation and analysis
+   RTL → GDS implementation and layout analysis
 
-Each chapter builds directly on the previous one.
+Each chapter builds directly on the previous one.  
+Skipping ahead is discouraged.
 
 ---
 
@@ -156,15 +176,15 @@ This project follows three principles:
 3. **Make behavior explainable**
 
 If you understand every block in this design,
-you understand the essence of a practical control ASIC.
+you understand the essence of a **practical control ASIC**.
 
 ---
 
 ## ➡️ Next
 
-Proceed to:
+Proceed to the control equations:
 
-➡️ **[Control Model](01_control_model.md)**
+➡️ **[01_control_model.md](01_control_model.md)**
 
-Start from the equations.  
+Start from the math.  
 Everything else follows.
