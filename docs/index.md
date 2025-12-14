@@ -144,6 +144,39 @@ This reflects a **realistic ASIC development trade-off**.
 
 ---
 
+## ✅ Verification Status (Completed)
+
+The verification phase for this project is **complete**.
+
+All planned verification steps have been executed and documented
+within the intended scope of this educational ASIC design.
+
+### Verification Coverage
+
+- ✅ RTL functional simulation
+- ✅ PID step-response verification (P / PI)
+- ✅ FSM state transition verification
+- ✅ PWM duty and timing verification
+- ✅ Gate-level **functional** simulation (post-layout)
+- ✅ Static Timing Analysis (STA) closure
+- ✅ DRC / LVS clean (OpenLane)
+
+### Not Performed
+
+- ⏭ Gate-level **timing-aware** simulation  
+  (intentionally omitted; STA used instead)
+
+### Conclusion
+
+Based on the above results, the V–I Control ASIC design is considered:
+
+> **Functionally correct, timing-clean, and ready as a reference RTL-to-GDS implementation
+> using OpenLane and SKY130.**
+
+This concludes the verification phase of the project.
+
+---
+
 ## 🛠 Prerequisites
 
 You should have basic knowledge of:
