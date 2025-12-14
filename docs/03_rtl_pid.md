@@ -295,8 +295,6 @@ of implementing control systems as an ASIC.
 
 ---
 
----
-
 ## ➡️ Next
 
 Proceed to system-level supervision:
