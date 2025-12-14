@@ -114,9 +114,16 @@ The design is therefore considered:
 
 ## ➡️ Next
 
-Proceed to:
+Proceed to reference materials:
 
-➡️ **[OpenLane Flow Summary](05_openlane_flow.md)**  
+➡️ **[Appendix A: Figure List](appendix_figures.md)**  
 
-to review synthesis, placement, routing,
-and physical verification results.
+This appendix provides a complete index of all figures
+used throughout the documentation.
+
+---
+
+## ⬅️ Navigation
+
+- 🔙 **[Documentation Index](index.md)**  
+- 🏠 **[Project Top](../index.md)**
