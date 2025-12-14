@@ -12,7 +12,7 @@ are mapped into **fixed-point arithmetic** suitable for a
 **deterministic digital ASIC implementation**.
 
 All voltage **V** and current **I** signals are treated explicitly
-as fixed-point numbers.
+as fixed-point numbers, with **bounded range and known precision**.
 
 ---
 
@@ -30,7 +30,8 @@ Fixed-point arithmetic provides:
 - Predictable overflow behavior
 - Efficient hardware implementation
 
-These properties are essential for **control and safety-critical systems**.
+These properties are essential for **control and safety-critical systems**,
+where timing and numerical behavior must be provable.
 
 ---
 
@@ -46,7 +47,7 @@ $$
 0 \le V_{\text{phys}} \le V_{\text{max}}
 $$
 
-The normalized digital voltage is:
+The normalized digital voltage is defined as:
 
 $$
 V[n] = \frac{V_{\text{phys}}}{V_{\text{max}}}
@@ -68,6 +69,29 @@ After normalization:
 
 - $V[n] \in [0, 1]$
 - $I[n] \in [0, 1]$
+
+This ensures that **all subsequent fixed-point computations**
+operate on bounded, dimensionless quantities.
+
+---
+
+## 🧩 Fixed-Point Data Path (Conceptual)
+
+The following figure shows how normalized V–I signals
+are processed through fixed-point arithmetic blocks
+before being converted into PWM timing.
+
+<img
+  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/openlane/tb_vi_control_github_rtl_01.png"
+  alt="Fixed-point datapath overview"
+  style="width:80%;"
+/>
+
+This structure clarifies where:
+
+- bit growth occurs
+- saturation must be applied
+- state variables are stored
 
 ---
 
@@ -101,7 +125,7 @@ $$
 \Delta = 2^{-15}
 $$
 
-This format is suitable for normalized V and I signals.
+This format is well suited for **normalized V and I signals**.
 
 ---
 
@@ -117,27 +141,31 @@ is implemented using fixed-point multipliers and adders.
 
 ### Gain Representation
 
-- $K_p, K_i, K_d$ are also represented in fixed-point
-- Gains are stored in programmable registers
+- $K_p$, $K_i$, $K_d$ are stored as fixed-point values
+- Gains are programmable via registers (SPI)
+- Gain changes do not affect control timing
 
 Care must be taken to allocate sufficient bit width
-for intermediate results.
+for **intermediate multiplication results**.
 
 ---
 
 ## 🚨 Saturation and Overflow Handling
 
-Unlike software, hardware must explicitly handle overflow.
+Unlike software, hardware must explicitly define behavior
+when numerical limits are exceeded.
 
-### Saturation Logic
+### Saturation Policy
 
 If a computed value exceeds the allowed range:
 
 - Positive overflow → clamp to maximum
 - Negative overflow → clamp to minimum
 
-This prevents wrap-around behavior,
-which can destabilize control systems.
+This avoids wrap-around behavior, which can cause
+**catastrophic instability in control systems**.
+
+All saturation points are explicitly coded in RTL.
 
 ---
 
@@ -150,8 +178,13 @@ which can destabilize control systems.
 | $\sum e[n]$ | Q4.15 | Accumulated integral |
 | $u[n]$ | Q2.15 | Control output |
 
-These values are examples and may be adjusted
-based on dynamic range requirements.
+These values are **design examples**, chosen to illustrate:
+
+- headroom for accumulation
+- bounded control output
+- safe saturation margins
+
+Actual formats may be adjusted based on system requirements.
 
 ---
 
@@ -168,19 +201,19 @@ $$
 T_{\text{latency}} = N_{\text{cycles}} \times T_{\text{clk}}
 $$
 
-This property is critical for stable control.
+This makes worst-case timing **trivial to compute and verify**.
 
 ---
 
 ## 🧪 Verification Strategy
 
-To verify fixed-point behavior:
+Fixed-point behavior is verified by:
 
-- Compare fixed-point results with floating-point reference models
-- Test saturation and overflow cases explicitly
-- Use waveform inspection to confirm bit growth
+- Comparing against floating-point reference models
+- Explicitly testing saturation and overflow cases
+- Inspecting waveforms for bit growth and truncation
 
-Scripts in `scripts/` can assist in analyzing quantization effects.
+This ensures numerical correctness **before synthesis**.
 
 ---
 
@@ -188,7 +221,7 @@ Scripts in `scripts/` can assist in analyzing quantization effects.
 
 Proceed to:
 
-- [`RTL PID Core`](03_rtl_pid.md)
+➡️ **[`RTL PID Core`](03_rtl_pid.md)**
 
-After understanding fixed-point arithmetic,
-the hardware implementation becomes straightforward.
+Once the number system is fixed,
+the RTL implementation becomes straightforward and mechanical.
