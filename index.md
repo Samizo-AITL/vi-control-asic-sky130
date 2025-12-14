@@ -11,10 +11,9 @@ nav_order: 1
 
 ## 🔗 Official Links
 
-| Resource | Link |
-|---------|------|
-| 🌐 GitHub Pages | https://samizo-aitl.github.io/vi-control-asic-sky130/ |
-| 💻 GitHub Repository | https://github.com/Samizo-AITL/vi-control-asic-sky130 |
+| Language | GitHub Pages 🌐 | GitHub 💻 |
+|----------|----------------|-----------|
+| 🇺🇸 English | [![GitHub Pages EN](https://img.shields.io/badge/GitHub%20Pages-English-brightgreen?logo=github)](https://samizo-aitl.github.io/vi-control-asic-sky130/) | [![GitHub Repo EN](https://img.shields.io/badge/GitHub-English-blue?logo=github)](https://github.com/Samizo-AITL/vi-control-asic-sky130/tree/main) |
 
 ---
 
@@ -146,28 +145,3 @@ This reflects **real-world ASIC development practice**.
 
 ---
 
-## 👤 Author
-
-**Shinichi Samizo**  
-M.S., Electrical and Electronic Engineering (Shinshu University)
-
-Former engineer at **Seiko Epson Corporation**  
-(semiconductor logic / memory / mixed-signal, inkjet systems)
-
-GitHub: https://github.com/Samizo-AITL  
-Email: shin3t72@gmail.com
-
----
-
-## 📄 License
-
-| Item | License |
-|------|---------|
-| Source Code | MIT |
-| Documentation | CC BY 4.0 / CC BY-SA 4.0 |
-| Figures | CC BY-NC 4.0 |
-
----
-
-➡️ **Next:**  
-👉 [Documentation Index](docs/index.md)
