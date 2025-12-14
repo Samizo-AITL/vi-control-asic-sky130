@@ -10,8 +10,10 @@ parent: "Documentation"
 This chapter explains how the **fixed-point PID control equation**
 is mapped directly into **Verilog RTL**.
 
-The goal is to create a **clear, minimal, and deterministic**
+The goal is to implement a **clear, minimal, and deterministic**
 PID core suitable for **ASIC implementation on SKY130**.
+
+This design prioritizes **explainability over optimization**.
 
 ---
 
@@ -19,13 +21,28 @@ PID core suitable for **ASIC implementation on SKY130**.
 
 The PID core is designed to:
 
-- Operate with fixed-point arithmetic
+- Operate entirely with fixed-point arithmetic
 - Execute in a deterministic number of clock cycles
 - Avoid hidden states or implicit behavior
-- Be easy to verify and extend
+- Be easy to verify, modify, and extend
 
 This is **not** a high-performance design,
-but a **transparent and educational reference**.
+but a **transparent educational reference**.
+
+---
+
+## 🧩 PID Core in System Context
+
+The PID core operates as part of the larger V–I control system,
+supervised by an FSM and followed by a PWM generator.
+
+<img
+  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/openlane/tb_vi_control_github_rtl_01.png"
+  alt="RTL block-level architecture including PID core"
+  style="width:80%;"
+/>
+
+The PID core itself is **purely synchronous** and contains no timing-dependent logic.
 
 ---
 
@@ -37,17 +54,15 @@ but a **transparent and educational reference**.
 |------|-------------|
 | `clk` | Control clock |
 | `rst_n` | Active-low synchronous reset |
+| `enable` | Control enable (from FSM) |
 | `v_in` | Normalized voltage input $V[n]$ |
-| `i_in` | Normalized current input $I[n]$ |
+| `i_in` | Normalized current input $I[n]$ (optional) |
 | `v_ref` | Voltage reference $V_{\text{ref}}[n]$ |
 | `kp` | Proportional gain |
 | `ki` | Integral gain |
 | `kd` | Derivative gain |
-| `enable` | Control enable |
 
-All numeric signals are fixed-point.
-
----
+All numeric signals are **fixed-point signed values**.
 
 ### Outputs
 
@@ -66,40 +81,61 @@ $$
 e[n] = V_{\text{ref}}[n] - V[n]
 $$
 
-Current $I[n]$ is available as an input
-and can be incorporated for advanced control strategies.
+Current $I[n]$ is provided as an input and can be incorporated
+into more advanced control laws, such as:
+
+- current limiting
+- feed-forward compensation
+- multi-loop control
+
+In this chapter, the **voltage error form** is used for clarity.
 
 ---
 
-## 🧠 Internal Registers
+## 🧠 Internal State Registers
 
-The PID core maintains the following state:
+The PID core maintains explicit state registers:
 
 - `e_prev` : previous error $e[n-1]$
-- `i_acc` : integral accumulator $\sum e[n]$
+- `i_acc`  : integral accumulator $\sum e[n]$
 
-All registers are updated synchronously.
+These states are:
+
+- fully visible in RTL
+- synchronously updated
+- reset deterministically
+
+There are **no implicit or hidden states**.
 
 ---
 
-## 🏗 RTL Structure
+## 🏗 RTL Pipeline Structure
 
-The PID core consists of four conceptual stages:
+The PID core can be conceptually divided into four stages:
 
-1. Error calculation  
-2. Proportional / Integral / Derivative computation  
-3. Summation and saturation  
-4. Output register
+1. **Error computation**  
+   $e[n] = V_{\text{ref}}[n] - V[n]$
 
-Each stage is implemented using simple combinational logic
+2. **P / I / D term computation**  
+   Fixed-point multiply operations
+
+3. **Summation and scaling**  
+   Alignment and right-shift
+
+4. **Output register**  
+   Registered control output
+
+Each stage uses simple combinational logic
 followed by registers.
+
+No multi-cycle or variable-latency operations are used.
 
 ---
 
 ## 🧾 Reference Verilog Implementation
 
 The following code illustrates a **minimal PID core**
-for educational purposes.
+intended for educational purposes.
 
 ```verilog
 module pid_core (
@@ -116,7 +152,7 @@ module pid_core (
     input  wire signed [15:0] kd,
 
     output reg  signed [15:0] u_out,  // Q1.15
-    output reg         valid
+    output reg               valid
 );
 
     reg signed [16:0] e_cur;
@@ -152,12 +188,17 @@ module pid_core (
 endmodule
 ```
 
-## ⚠️ Notes on Saturation
+This implementation maps directly from the equations
+defined in the previous chapters.
 
-For clarity, saturation logic is omitted in the reference implementation.
+---
 
-In a production-quality control ASIC, explicit saturation logic
-**must** be implemented to ensure stability and safety.
+## 🚨 Saturation and Safety Considerations
+
+For clarity, saturation logic is omitted in the reference implementation above.
+
+In a production-quality control ASIC,
+explicit saturation logic is mandatory to guarantee safe operation.
 
 ### Why Saturation Is Required
 
@@ -167,23 +208,23 @@ Without saturation:
 - Output wrap-around can occur
 - Control behavior becomes unpredictable
 
-This is especially dangerous in **V–I control systems**,
+This is especially dangerous in V–I control systems,
 where excessive voltage or current can damage hardware.
 
 ---
 
 ## 🧯 Integral Windup Protection
 
-The integral accumulator `i_acc` should be protected
+The integral accumulator `i_acc` must be protected
 against excessive growth.
 
 Typical strategies include:
 
 - Clamping `i_acc` to a predefined range
-- Conditional integration (integrate only when not saturated)
+- Conditional integration (integrate only when output is not saturated)
 - Resetting the integrator in `FAULT` state
 
-Example (conceptual):
+### Example (conceptual)
 
 ```verilog
 if (i_acc > I_ACC_MAX)
@@ -194,13 +235,19 @@ else
     i_acc <= i_acc + e_cur;
 ```
 
+This logic prevents integrator windup
+while preserving deterministic timing.
+
+---
+
 ## 🔒 Output Clamping
 
-The control output u_out must be limited
+The control output `u_out` must be limited
 to a safe operating range.
 
-Example:
-```
+### Example (conceptual)
+
+```verilog
 if (u_calc > U_MAX)
     u_out <= U_MAX;
 else if (u_calc < U_MIN)
@@ -209,36 +256,51 @@ else
     u_out <= u_calc;
 ```
 
-This prevents the PWM generator from receiving
+This ensures the PWM generator never receives
 invalid or dangerous commands.
+
+---
 
 ## ⏱ Timing Impact
 
-Saturation logic adds:
+Adding saturation and clamping logic:
 
-A small amount of combinational logic
+- Increases combinational logic slightly
+- Adds **no additional clock cycles**
 
-No additional clock cycles
+Deterministic timing is fully preserved.
 
-Therefore, deterministic timing is preserved.
+---
 
 ## 🧪 Verification Considerations
 
-Saturation behavior must be verified explicitly:
+RTL verification should include:
 
-Apply large step errors to force saturation
+- Step response tests (P / PI)
+- Forced saturation scenarios
+- Integrator recovery after saturation
+- Waveform inspection of internal states
 
-Confirm clamping at both positive and negative limits
+All internal registers should be observable in simulation.
 
-Verify integrator recovery after saturation
-
-Waveform inspection is strongly recommended.
+---
 
 ## 🧠 Educational Note
 
-Saturation logic is often hidden in software libraries.
-In hardware design, it must be made explicit.
+In software, saturation is often hidden in libraries.
+
+In hardware, **every limit must be explicit**.
 
 This visibility is one of the key educational benefits
 of implementing control systems as an ASIC.
 
+---
+
+## ➡️ Next
+
+Proceed to:
+
+➡️ **[`FSM & PWM`](04_fsm_pwm.md)**
+
+The next chapter shows how the PID output
+is supervised and converted into physical control signals.
