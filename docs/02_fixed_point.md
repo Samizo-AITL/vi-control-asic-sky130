@@ -239,11 +239,20 @@ This ensures numerical correctness **before synthesis**.
 
 ---
 
+---
+
 ## ➡️ Next
 
-Proceed to:
+Proceed to RTL implementation:
 
-➡️ **[`RTL PID Core`](03_rtl_pid.md)**
+➡️ **[RTL: PID Core](03_rtl_pid.md)**  
 
-Once the number system is fixed,
-the RTL implementation becomes straightforward and mechanical.
+The next chapter maps the control equations
+directly into synthesizable Verilog RTL.
+
+---
+
+## ⬅️ Navigation
+
+- 🔙 **[Documentation Index](index.md)**  
+- 🏠 **[Project Top](../index.md)**
