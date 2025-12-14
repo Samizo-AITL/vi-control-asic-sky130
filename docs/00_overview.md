@@ -93,7 +93,7 @@ The following figure shows the **actual RTL structure**
 used in this project and verified by simulation.
 
 <img
-  src="/vi-control-asic-sky130/assets/images/openlane/tb_vi_control_github_rtl_01.png"
+  src="/https://github.com/Samizo-AITL/vi-control-asic-sky130/assets/images/openlane/tb_vi_control_github_rtl_01.png"
   alt="V–I Control RTL overview"
   style="width:80%;"
 />
