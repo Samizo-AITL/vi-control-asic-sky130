@@ -90,33 +90,39 @@ V[n], I[n]
 
 ## 🧠 RTL-Level Architecture (Actual Implementation)
 
-The following figure shows the **actual RTL structure**
-used in this project and verified by simulation.
+The following figure shows the **logical RTL block structure**
+used in this project.
 
 <img
-  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/openlane/tb_vi_control_fsm_01.png"
-  alt="V–I Control RTL overview"
-  style="width:80%;"
+  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/architecture/vi_control_block_diagram.png"
+  alt="V–I Control RTL block diagram"
+  style="width:60%;"
 />
 
-This diagram reflects the real module hierarchy:
+This architecture reflects the actual RTL hierarchy:
 
 - Register interface (SPI)
-- PID core (fixed-point)
+- Fixed-point PID core
 - FSM supervisor
 - PWM generator
+
+Each block is implemented as a **cycle-accurate Verilog module**
+and verified independently.
+
+> Detailed waveform-based verification results are collected in  
+> **[Appendix A: Figure List](appendix_figures.md)**.
 
 ---
 
 ## 🔁 FSM Supervisor Overview
 
-The control behavior is governed by a **hardware FSM**
+The control behavior is governed by a **hardware finite-state machine (FSM)**
 with explicit operating states.
 
 <img
-  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/openlane/tb_vi_control_fsm_01.png"
-  alt="FSM overview"
-  style="width:80%;"
+  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/architecture/fsm_state_diagram.png"
+  alt="FSM state transition diagram"
+  style="width:50%;"
 />
 
 The FSM enforces:
@@ -125,25 +131,40 @@ The FSM enforces:
 - Deterministic RUN behavior
 - Immediate FAULT handling
 
+All state transitions are **fully synchronous and cycle-accurate**.
+
+> FSM internal signals and timing behavior are verified by RTL simulation  
+> and documented in **Appendix A**.
+
 ---
 
-## 🧭 FSM State Transitions
+## 🧭 FSM State Definition
 
-The explicit FSM state transitions are shown below.
+The FSM explicitly defines the following states:
 
-<img
-  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/openlane/tb_vi_control_fsm_state_01.png"
-  alt="FSM state diagram"
-  style="width:80%;"
-/>
+- `INIT`  
+  Reset and parameter loading via SPI
 
-States are:
+- `RUN`  
+  Normal closed-loop control operation
 
-- `INIT`  : reset / parameter load
-- `RUN`   : normal control operation
-- `FAULT` : latched error condition
+- `FAULT`  
+  Latched error condition requiring explicit clear
 
-All transitions are **cycle-accurate and synchronous**.
+This explicit state modeling is a key advantage of
+**ASIC-based control systems** over MCU-based implementations.
+
+---
+
+## 📎 Appendix Reference
+
+All waveform figures, comparison cases, layout inspection images,
+and GDS views are collected in the appendix:
+
+➡️ **[Appendix A: Figure List](appendix_figures.md)**
+
+The appendix serves as the **authoritative index** for
+verification and implementation figures.
 
 ---
 
