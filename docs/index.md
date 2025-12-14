@@ -96,6 +96,11 @@ FSM supervisor, PWM generator, and safety behavior.
 ➡️ **[05_openlane_flow.md](05_openlane_flow.md)**  
 Synthesis, place & route, STA, and layout inspection.
 
+### 6️⃣ Gate-level Simulation (Functional)
+➡️ **[06_gate_sim_functional.md](06_gate_sim_functional.md)**  
+Post-layout functional verification using SKY130 standard cells  
+(no timing, logical equivalence check).
+
 ---
 
 ## 📎 Appendix
@@ -124,13 +129,14 @@ This project focuses on **functional correctness at RTL level**:
 - PWM duty and timing validation using GTKWave
 
 > **Note on Gate-Level Simulation**  
-> Gate-level simulation using SKY130 standard cells was investigated.  
-> However, due to **UDP-based cell models**  
-> (e.g. `sky130_fd_sc_hd__udp_*`) and tool limitations,  
-> full GLS is **not included** in this documentation.
+> Gate-level **functional simulation** using SKY130 standard cells  
+> was performed to confirm logical equivalence after place-and-route.
 >
-> Instead, correctness is ensured via:
-> - RTL simulation
+> Due to **UDP-based cell models**
+> (e.g. `sky130_fd_sc_hd__udp_*`) and simulator limitations,
+> **timing-aware gate-level simulation is not performed**.
+>
+> Timing correctness is ensured by:
 > - Static Timing Analysis (STA) in OpenLane
 > - Post-layout inspection (Magic / GDS)
 
