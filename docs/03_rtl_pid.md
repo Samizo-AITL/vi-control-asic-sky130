@@ -34,16 +34,14 @@ but a **transparent educational reference**.
 
 ## 🧩 PID Core in System Context
 
-The PID core operates as part of the larger V–I control system,
+The PID core operates as part of a larger control system,
 supervised by an FSM and followed by a PWM generator.
 
-<img
-  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/openlane/tb_vi_control_github_rtl_01.png"
-  alt="RTL block-level architecture including PID core"
-  style="width:80%;"
-/>
+In this chapter, the focus is intentionally limited to the
+**PID core itself**, independent of supervision and output mapping.
 
-The PID core itself is **purely synchronous** and contains no timing-dependent logic.
+> System-level integration and waveform-based verification results
+> are documented in **Appendix A: Figure List**.
 
 ---
 
