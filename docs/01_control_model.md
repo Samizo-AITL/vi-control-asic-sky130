@@ -21,6 +21,8 @@ where:
 - $K_i$  : integral gain
 - $K_d$  : derivative gain
 
+This equation is mapped **directly and explicitly** to fixed-point hardware.
+
 ---
 
 ## ⚡ Error Definition Using V–I Feedback
@@ -44,12 +46,40 @@ where:
 - $V[n]$ : measured voltage (digital sample)
 - $I[n]$ : measured current (digital sample)
 
-All voltage and current values are assumed to be digitized
-by **external ADCs**.
+All voltage and current values are assumed to be digitized  
+by **external ADCs** and provided to the ASIC synchronously.
 
 ---
 
-## 🔢 Fixed-Point Arithmetic
+## 🧠 Digital Control Architecture
+
+The control core is composed of **three deterministic hardware blocks**.
+
+<img
+  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/openlane/tb_vi_control_fsm_01.png"
+  alt="V–I Control Digital Architecture"
+  style="width:80%;"
+/>
+
+### Block Responsibilities
+
+- **PID Core**  
+  Fixed-point computation of the control law
+
+- **FSM Supervisor**  
+  Operating modes:
+  - `INIT`
+  - `RUN`
+  - `FAULT`
+
+- **PWM Generator**  
+  Converts $u[n]$ to PWM duty or timing signals
+
+All blocks share a **single deterministic control clock**.
+
+---
+
+## 🔢 Fixed-Point Arithmetic Policy
 
 All control computations are implemented using **fixed-point arithmetic**
 to guarantee deterministic timing and hardware efficiency.
@@ -67,32 +97,11 @@ Example Q-format definitions:
 - Current $I[n]$ : Qm.n
 - Control output $u[n]$ : Qp.q
 
----
-
-## 🧠 Digital Control Architecture
-
-The control core consists of the following blocks:
-
-- **PID Core**  
-  Fixed-point computation of the control law
-
-- **FSM Supervisor**  
-  Operating modes:
-  - `INIT`
-  - `RUN`
-  - `FAULT`
-
-- **PWM Generator**  
-  Converts $u[n]$ to PWM duty or timing signals
-
-- **Register Interface**  
-  Parameter and status access via SPI / GPIO
-
-All blocks share a **single deterministic control clock**.
+This makes numerical behavior **fully analyzable before RTL coding**.
 
 ---
 
-## ⏱ Deterministic Timing
+## ⏱ Deterministic Timing (Why Not MCU?)
 
 Unlike MCU-based control systems, this design features:
 
@@ -100,8 +109,16 @@ Unlike MCU-based control systems, this design features:
 - No task scheduling
 - No execution jitter
 
-Each control cycle completes in a **fixed number of clock cycles**,
-making the design suitable for industrial and safety-critical control.
+Each control cycle completes in a **fixed number of clock cycles**.
+
+| Aspect | MCU | This ASIC |
+|------|-----|-----------|
+| Timing | Variable | Deterministic |
+| Latency | Interrupt dependent | Fixed |
+| Control flow | Software | Hardware FSM |
+| Analysis | Difficult | Exact |
+
+This property is essential for **industrial and safety-oriented control**.
 
 ---
 
@@ -123,7 +140,7 @@ This project prioritizes:
 - Explainability
 - Reproducibility
 
-Every control equation can be traced directly to RTL,
+Every control equation can be traced directly to RTL,  
 and every RTL block can be traced to the final layout.
 
 ---
