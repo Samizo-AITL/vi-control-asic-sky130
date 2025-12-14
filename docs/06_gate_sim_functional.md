@@ -8,141 +8,106 @@ permalink: /docs/06_gate_sim_functional/
 
 # 🔬 Gate-level Simulation (Functional)
 
-This section documents the **gate-level functional simulation**
-of the V–I Control ASIC after **OpenLane place-and-route completion**
+This section documents the **investigation and technical assessment**
+of gate-level functional simulation for the V–I Control ASIC
+after **OpenLane place-and-route completion**
 using the **SkyWater SKY130** PDK.
 
-The objective is to confirm that the **post-layout gate netlist**
-is **logically equivalent** to the RTL design.
+---
+
+## 🎯 Objective
+
+The original objective of this phase was to evaluate the feasibility of
+**gate-level functional simulation** using open-source tools,
+and to determine whether post-layout functional equivalence
+could be verified by simulation.
+
+This phase explicitly **does not target timing validation**.
+Timing correctness is addressed separately by **Static Timing Analysis (STA)**.
 
 ---
 
-## 🎯 Purpose of Gate-level Simulation
-
-The purpose of this simulation is **not timing validation**.
-
-Instead, it verifies:
-
-- Logical equivalence between RTL and gate netlist
-- Correct reset and initialization behavior
-- Deterministic FSM operation after synthesis and PnR
-- Absence of functional mismatches or unknown (X) states
-
-This corresponds to a **functional LEC-style check**
-performed using simulation.
-
----
-
-## 🛠 Simulation Configuration
+## 🛠 Intended Simulation Configuration
 
 | Item | Description |
 |---|---|
-| Simulator | iverilog |
+| Simulator | Icarus Verilog (iverilog) |
 | Netlist | OpenLane final gate-level Verilog |
 | PDK | SkyWater SKY130 |
 | Mode | Functional (no timing) |
 | Delays | UNIT_DELAY |
-| UDP | Not used |
-
-Timing-aware gate-level simulation is intentionally omitted.
-Timing correctness is verified separately by **static timing analysis (STA)**.
+| Purpose | Logical equivalence check |
 
 ---
 
-## 🧪 Testbench Strategy
+## ⚠ Tool Limitation Identified
 
-The **same testbench** used for RTL simulation
-is reused for gate-level simulation.
+During setup and compilation, it was confirmed that:
 
-This ensures:
+- The SKY130 standard cell Verilog models contain
+  **UDP (User Defined Primitive)** constructs  
+  (e.g. `sky130_fd_sc_hd__udp_*`)
+- These UDP constructs are **not fully supported by Icarus Verilog**
+- As a result, gate-level netlists using the official SKY130 libraries
+  cannot be reliably compiled or simulated with iverilog
 
-- Identical stimulus
-- Cycle-by-cycle output comparison
-- Direct functional equivalence checking
-
-No gate-specific testbench modifications are required.
-
----
-
-## ✅ Simulation Results Summary
-
-The following conditions were verified:
-
-- Reset sequence executes correctly
-- FSM transitions match RTL behavior
-- Control output (V–I based) matches RTL cycle-by-cycle
-- No mismatches or X-propagation observed
-
-Overall result:
-
-> **Gate-level functional behavior is identical to RTL.**
+This limitation is **tool-related**, not design-related.
 
 ---
 
-## 📈 Waveform Inspection
+## ❌ Gate-level Functional Simulation Result
 
-### Reset and Initialization Sequence
+Due to the simulator limitation described above:
 
-<img
-  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/gate_sim/reset_seq.png"
-  alt="Gate-level reset sequence"
-  style="width:60%;"
-/>
+> **Full gate-level functional simulation using Icarus Verilog
+> was not feasible for this design.**
 
-This waveform confirms correct synchronous reset release
-and FSM initialization.
+No functional mismatches were observed at RTL level,
+and the inability to run gate-level simulation
+does **not indicate any design error**.
 
 ---
 
-### Normal Control Operation
+## ✅ Verification Strategy Adopted Instead
 
-<img
-  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/gate_sim/waveform_ok.png"
-  alt="Gate-level functional waveform"
-  style="width:60%;"
-/>
+Design correctness is ensured by the following verified steps:
 
-The control output and FSM state evolution
-match the RTL simulation exactly.
+- Exhaustive **RTL functional simulation**
+- Successful completion of the **OpenLane RTL-to-GDS flow**
+- **Static Timing Analysis (STA)** timing closure
+- **DRC / LVS clean** physical verification
+- Post-layout netlist generation without errors
 
----
-
-## 🧠 Interpretation
-
-This gate-level functional simulation confirms that:
-
-- Logic synthesis preserved RTL intent
-- Place-and-route did not introduce functional errors
-- The control algorithm is robust against structural transformations
-
-Combined with:
-
-- RTL simulation
-- DRC / LVS clean layout
-- STA timing closure
-
-the design is considered **functionally and structurally correct**.
+This verification strategy is sufficient and widely accepted
+for **digital control ASICs**, especially in educational
+and open-source design flows.
 
 ---
 
-## 🚫 Why Gate-level Timing Simulation Is Not Performed
+## 🧠 Engineering Interpretation
 
-Gate-level timing simulation is not performed for the following reasons:
+The investigation of gate-level simulation itself
+provides an important engineering conclusion:
 
-- Timing correctness is already guaranteed by STA
-- UDP-based SKY130 cell models are not simulator-friendly
-- Functional correctness is the primary educational objective
+- Gate-level simulation feasibility depends on
+  **both the cell library and the simulator**
+- Not all open-source simulators support
+  production-grade standard cell models
+- Recognizing and documenting such limitations
+  is part of sound ASIC design practice
 
-This approach reflects **common industry practice**
-for digital ASIC control designs.
+The design is therefore considered:
+
+> **Functionally correct, timing-clean, and implementation-ready**
+> within the defined scope of this project.
 
 ---
 
 ## ✔ Verification Status
 
-- ✅ RTL simulation
-- ✅ Gate-level functional simulation
+- ✅ RTL functional simulation
 - ✅ OpenLane PnR (DRC / LVS / STA clean)
+- ⏭ Gate-level functional simulation (investigated, not executed)
 - ⏭ Gate-level timing simulation (not performed)
 
 ---
@@ -154,4 +119,4 @@ Proceed to:
 ➡️ **[OpenLane Flow Summary](05_openlane_flow.md)**  
 
 to review synthesis, placement, routing,
-and layout verification results.
+and physical verification results.
