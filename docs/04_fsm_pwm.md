@@ -218,8 +218,6 @@ This transparency is a major advantage of ASIC-based control design.
 
 ---
 
----
-
 ## ➡️ Next
 
 Proceed to physical implementation:
