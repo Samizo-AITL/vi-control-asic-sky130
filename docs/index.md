@@ -65,7 +65,6 @@ V[n], I[n]
 +-----------+
 ```
 
-
 ---
 
 ## 📚 Documentation Structure
@@ -98,8 +97,8 @@ Synthesis, place & route, STA, and layout inspection.
 
 ### 6️⃣ Gate-level Simulation (Functional)
 ➡️ **[06_gate_sim_functional.md](06_gate_sim_functional.md)**  
-Post-layout functional verification using SKY130 standard cells  
-(no timing, logical equivalence check).
+Gate-level simulation **investigation and technical assessment**  
+(post-layout, functional intent).
 
 ---
 
@@ -115,8 +114,6 @@ This appendix clarifies:
 - Which verification phase it belongs to
 - Why similar-looking figures exist (comparison / stepwise validation)
 
-It is recommended to consult the appendix when reviewing waveforms or layouts.
-
 ---
 
 ## ✅ Verification Strategy
@@ -129,26 +126,28 @@ This project focuses on **functional correctness at RTL level**:
 - PWM duty and timing validation using GTKWave
 
 > **Note on Gate-Level Simulation**  
-> Gate-level **functional simulation** using SKY130 standard cells  
-> was performed to confirm logical equivalence after place-and-route.
+> Gate-level **functional simulation was investigated but not completed**.
 >
-> Due to **UDP-based cell models**
-> (e.g. `sky130_fd_sc_hd__udp_*`) and simulator limitations,
-> **timing-aware gate-level simulation is not performed**.
+> The SKY130 standard cell libraries rely on
+> **UDP (User Defined Primitive)** constructs  
+> (e.g. `sky130_fd_sc_hd__udp_*`),
+> which are not fully supported by Icarus Verilog.
 >
-> Timing correctness is ensured by:
+> As a result, reliable gate-level functional simulation
+> using Icarus Verilog was not feasible.
+>
+> Timing correctness is instead ensured by:
 > - Static Timing Analysis (STA) in OpenLane
 > - Post-layout inspection (Magic / GDS)
 
-This reflects a **realistic ASIC development trade-off**.
+This reflects a **realistic and widely accepted ASIC development trade-off**
+when using open-source tools.
 
 ---
 
 ## ✅ Verification Status (Completed)
 
-The verification phase for this project is **complete**.
-
-All planned verification steps have been executed and documented
+The verification phase for this project is **complete**
 within the intended scope of this educational ASIC design.
 
 ### Verification Coverage
@@ -157,20 +156,23 @@ within the intended scope of this educational ASIC design.
 - ✅ PID step-response verification (P / PI)
 - ✅ FSM state transition verification
 - ✅ PWM duty and timing verification
-- ✅ Gate-level **functional** simulation (post-layout)
+- ⚠ Gate-level functional simulation  
+  (investigated, not completed due to tool limitations)
 - ✅ Static Timing Analysis (STA) closure
 - ✅ DRC / LVS clean (OpenLane)
 
 ### Not Performed
 
-- ⏭ Gate-level **timing-aware** simulation  
+- ⏭ Gate-level timing-aware simulation  
   (intentionally omitted; STA used instead)
 
 ### Conclusion
 
-Based on the above results, the V–I Control ASIC design is considered:
+Based on the completed verification steps and documented tool limitations,
+the V–I Control ASIC design is considered:
 
-> **Functionally correct, timing-clean, and ready as a reference RTL-to-GDS implementation
+> **Functionally correct at RTL level, timing-clean by STA,
+> and complete as an educational RTL-to-GDS reference implementation
 > using OpenLane and SKY130.**
 
 This concludes the verification phase of the project.
@@ -214,6 +216,4 @@ you understand the essence of a **practical control ASIC**.
 ---
 
 Happy learning, and enjoy building silicon.
-
-
 
