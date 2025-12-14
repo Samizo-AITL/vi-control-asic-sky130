@@ -27,6 +27,9 @@ The project is designed as both:
 - 📘 **Educational material** (control theory → RTL → GDS)
 - 🧩 **Practical ASIC prototype** (MCU offloading / deterministic control)
 
+This repository documents a **completed and verified ASIC design**,
+not a partial experiment or tool demonstration.
+
 ---
 
 ## 📚 Documentation Roadmap
@@ -60,7 +63,12 @@ Read the documents in the following order:
    👉 [OpenLane Flow](docs/05_openlane_flow.md)  
    RTL → GDS implementation using OpenLane.
 
-8. **Appendix A: Figure List**  
+8. **Gate-level Simulation (Functional)**  
+   👉 [Gate-level Simulation](docs/06_gate_sim_functional.md)  
+   Post-layout functional verification  
+   (logical equivalence, no timing).
+
+9. **Appendix A: Figure List**  
    👉 [Appendix A – Figure List](docs/appendix_figures.md)
 
 ---
@@ -120,13 +128,39 @@ vi-control-asic-sky130/
 │  ├─ 02_fixed_point.md
 │  ├─ 03_rtl_pid.md
 │  ├─ 04_fsm_pwm.md
-│  └─ 05_openlane_flow.md
+│  ├─ 05_openlane_flow.md
+|  ├─ 06_gate_sim_functional.md
+|  ├─ appendix_figures.md
 │
 ├─ rtl/
 ├─ sim/
 ├─ openlane/
 └─ scripts/
 ```
+
+---
+
+## ✅ Verification Status
+
+The verification phase of this project is **complete**.
+
+### Completed Checks
+
+- ✅ RTL functional simulation
+- ✅ PID step-response verification (P / PI)
+- ✅ FSM state transition verification
+- ✅ PWM duty and timing verification
+- ✅ Gate-level **functional** simulation (post-layout)
+- ✅ Static Timing Analysis (STA) closure
+- ✅ DRC / LVS clean (OpenLane)
+
+### Not Performed
+
+- ⏭ Gate-level **timing-aware** simulation  
+  (intentionally omitted; STA used instead)
+
+> This verification strategy reflects **realistic industry practice**
+> for digital control ASICs using standard-cell flows.
 
 ---
 
