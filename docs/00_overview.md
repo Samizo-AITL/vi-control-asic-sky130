@@ -3,6 +3,7 @@ layout: default
 title: "Overview"
 nav_order: 1
 parent: "Documentation"
+permalink: /docs/00_overview/
 ---
 
 # 🧭 Overview  
