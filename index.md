@@ -13,7 +13,7 @@ nav_order: 1
 
 | Language | GitHub Pages 🌐 | GitHub 💻 |
 |----------|----------------|-----------|
-| 🇺🇸 English | https://samizo-aitl.github.io/vi-control-asic-sky130/ | https://github.com/Samizo-AITL/vi-control-asic-sky130 |
+| 🇺🇸 English | [GitHub Pages](https://samizo-aitl.github.io/vi-control-asic-sky130/) | [GitHub Repository](https://github.com/Samizo-AITL/vi-control-asic-sky130) |
 
 ---
 
@@ -34,27 +34,27 @@ The project is designed as both:
 Read the documents in the following order:
 
 1. **Overview**  
-   `docs/00_overview.md`  
+   👉 [Overview](00_overview.md)  
    System concept, motivation, and design philosophy.
 
 2. **Control Model**  
-   `docs/01_control_model.md`  
+   👉 [Control Model](01_control_model.md)  
    Discrete-time PID control using V–I feedback.
 
 3. **Fixed-Point Design**  
-   `docs/02_fixed_point.md`  
+   👉 [Fixed-Point Design](02_fixed_point.md)  
    Signal normalization, Q-format selection, saturation.
 
 4. **RTL PID Core**  
-   `docs/03_rtl_pid.md`  
+   👉 [RTL PID Core](03_rtl_pid.md)  
    Mapping equations directly into Verilog RTL.
 
 5. **FSM Supervisor & PWM Generator**  
-   `docs/04_fsm_pwm.md`  
+   👉 [FSM Supervisor & PWM Generator](04_fsm_pwm.md)  
    Safety supervision and pulse generation.
 
 6. **OpenLane Flow**  
-   `docs/05_openlane_flow.md`  
+   👉 [OpenLane Flow](05_openlane_flow.md)  
    RTL → GDS implementation using OpenLane.
 
 ---
@@ -154,9 +154,8 @@ This project is suitable for:
 **Shinichi Samizo**  
 M.S. in Electrical and Electronic Engineering, Shinshu University  
 Former Engineer at Seiko Epson Corporation  
-Expertise: Logic, memory, high-voltage mixed-signal, industrial control
 
-GitHub: https://github.com/Samizo-AITL  
+GitHub: [https://github.com/Samizo-AITL](https://github.com/Samizo-AITL)
 
 ---
 
