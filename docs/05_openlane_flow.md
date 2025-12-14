@@ -3,6 +3,7 @@ layout: default
 title: "OpenLane Flow"
 nav_order: 6
 parent: "Documentation"
+permalink: /docs/05_openlane_flow/
 ---
 
 # 🏭 OpenLane Flow (RTL → GDS)
