@@ -295,11 +295,20 @@ of implementing control systems as an ASIC.
 
 ---
 
+---
+
 ## ➡️ Next
 
-Proceed to:
+Proceed to system-level supervision:
 
-➡️ **[`FSM & PWM`](04_fsm_pwm.md)**
+➡️ **[RTL: FSM & PWM](04_fsm_pwm.md)**  
 
-The next chapter shows how the PID output
-is supervised and converted into physical control signals.
+The next chapter introduces the FSM supervisor,
+safety handling, and PWM generation logic.
+
+---
+
+## ⬅️ Navigation
+
+- 🔙 **[Documentation Index](index.md)**  
+- 🏠 **[Project Top](../index.md)**
