@@ -9,50 +9,39 @@ parent: "Documentation"
 **V–I Control ASIC on SKY130**
 
 This project demonstrates how a **Voltage–Current (V–I) based control system**
-can be implemented as a **fully digital ASIC**, using  
+can be implemented as a **fully digital ASIC**, using
 **OpenLane** and **SkyWater SKY130**.
 
-The emphasis is on:
-
-- clarity of design intent
-- deterministic timing
-- educational transparency
-
-This is not just a result-oriented project,  
-but a **process-oriented design record**.
+The focus is on **clarity, determinism, and educational value**.
 
 ---
 
 ## 🎯 What This Project Is
 
-This repository serves as:
+This repository is:
 
 - 📘 A **step-by-step educational guide**
-- 🧩 A **practical digital control ASIC reference**
-- 🛠 A **complete RTL-to-GDS implementation example** using open-source tools
+- 🧩 A **practical control ASIC reference design**
+- 🛠 A **complete RTL-to-GDS example** using open-source tools
 
-You will see, end to end, how:
+You will see how:
 
-> **Control theory becomes fixed-point math,**  
-> **fixed-point math becomes RTL,**  
-> **and RTL becomes silicon.**
-
-Every abstraction layer is explicitly connected to the next.
+> **Control theory becomes fixed-point math,  
+> fixed-point math becomes RTL,  
+> and RTL becomes silicon.**
 
 ---
 
 ## ❌ What This Project Is NOT
 
-To keep the scope focused and realistic, this project is **not**:
+To keep the scope clear, this project is **not**:
 
-- A high-performance AI or DSP accelerator
+- A high-performance AI accelerator
 - A mixed-signal SoC with on-chip ADC/DAC
-- A vendor-specific MCU or firmware example
+- A vendor-specific MCU example
 
-All **analog functions** (ADC, DAC, current sensing) are intentionally
-kept **off-chip**.
-
-The ASIC focuses purely on **deterministic digital control logic**.
+All **analog functions** (ADC, DAC, current sensing)
+are intentionally kept **off-chip**.
 
 ---
 
@@ -69,20 +58,13 @@ as **digital fixed-point values**:
 - $V[n]$ : voltage sample  
 - $I[n]$ : current sample  
 
-The ASIC computes a discrete-time control output:
+The ASIC computes a control output:
 
-- $u[n]$ : control command  
-  → used as PWM duty or timing information
-
-This makes the control loop:
-
-- synchronous
-- cycle-accurate
-- fully analyzable in hardware terms
+- $u[n]$ : control command → PWM duty or timing
 
 ---
 
-## 🧩 Target Architecture (Conceptual)
+## 🧩 Target Architecture (Concept)
 
 ```
 V[n], I[n]
@@ -103,28 +85,79 @@ V[n], I[n]
 +----------------+
 ```
 
+---
 
-This separation ensures:
+## 🧠 RTL-Level Architecture (Actual Implementation)
 
-- Deterministic timing
-- Explicit safety handling
-- Clear responsibility per block
+The following figure shows the **actual RTL structure**
+used in this project and verified by simulation.
+
+<img
+  src="/vi-control-asic-sky130/assets/images/openlane/tb_vi_control_github_rtl_01.png"
+  alt="V–I Control RTL overview"
+  style="width:80%;"
+/>
+
+This diagram reflects the real module hierarchy:
+
+- Register interface (SPI)
+- PID core (fixed-point)
+- FSM supervisor
+- PWM generator
+
+---
+
+## 🔁 FSM Supervisor Overview
+
+The control behavior is governed by a **hardware FSM**
+with explicit operating states.
+
+<img
+  src="/vi-control-asic-sky130/assets/images/openlane/tb_vi_control_fsm_01.png"
+  alt="FSM overview"
+  style="width:80%;"
+/>
+
+The FSM enforces:
+
+- Safe startup sequencing
+- Deterministic RUN behavior
+- Immediate FAULT handling
+
+---
+
+## 🧭 FSM State Transitions
+
+The explicit FSM state transitions are shown below.
+
+<img
+  src="/vi-control-asic-sky130/assets/images/openlane/tb_vi_control_fsm_state_01.png"
+  alt="FSM state diagram"
+  style="width:80%;"
+/>
+
+States are:
+
+- `INIT`  : reset / parameter load
+- `RUN`   : normal control operation
+- `FAULT` : latched error condition
+
+All transitions are **cycle-accurate and synchronous**.
 
 ---
 
 ## ⏱ Why ASIC-Based Control?
 
-Compared with MCU-based control approaches:
+Compared with MCU-based control:
 
-| MCU-based Control | ASIC-based Control (This Project) |
+| MCU | ASIC (This Project) |
 |---|---|
 | Interrupt-driven | Fully synchronous |
 | Variable latency | Deterministic latency |
-| Software-hidden states | Explicit FSM states |
-| Hard to prove timing | Exact cycle count |
+| Software hidden states | Explicit hardware states |
+| Difficult timing analysis | Exact cycle count |
 
-For **industrial and safety-oriented control**,  
-*determinism and explainability matter more than raw flexibility*.
+For **industrial and safety-oriented control**, determinism matters.
 
 ---
 
@@ -134,36 +167,36 @@ For **industrial and safety-oriented control**,
 - **EDA Flow**: OpenLane
 - **Design Style**: Digital-only, single clock
 - **Language**: Verilog HDL
-- **Arithmetic**: Fixed-point (Q-format)
+- **Arithmetic**: Fixed-point
 
-All RTL and flows are compatible with the open-source SKY130 PDK.
+All designs in this repository are compatible
+with the open-source SKY130 PDK.
 
 ---
 
-## 📚 Documentation Roadmap
+## 📚 Documentation Structure
 
-The documentation progresses in the following order:
+The documentation is organized as follows:
 
 1. **Overview**  
-   System concept and motivation (this chapter)
+   System concept and architecture
 
 2. **Control Model**  
-   Discrete-time PID equations using V–I feedback
+   Discrete-time PID control using V–I feedback
 
 3. **Fixed-Point Design**  
-   Scaling, Q-format selection, saturation
+   Q-format selection, scaling, saturation
 
 4. **RTL PID Core**  
-   Verilog implementation of the control law
+   Cycle-accurate Verilog implementation
 
 5. **FSM & PWM**  
-   Supervision, safety logic, pulse generation
+   Supervision, safety, and pulse generation
 
 6. **OpenLane Flow**  
    RTL → GDS implementation and layout analysis
 
-Each chapter builds directly on the previous one.  
-Skipping ahead is discouraged.
+Each chapter builds directly on the previous one.
 
 ---
 
@@ -176,15 +209,16 @@ This project follows three principles:
 3. **Make behavior explainable**
 
 If you understand every block in this design,
-you understand the essence of a **practical control ASIC**.
+you understand the essence of a practical control ASIC.
 
 ---
 
 ## ➡️ Next
 
-Proceed to the control equations:
+Proceed to:
 
-➡️ **[01_control_model.md](01_control_model.md)**
+➡️ **[Control Model Overview](01_control_model.md)**  
 
-Start from the math.  
+Start from the equations.  
 Everything else follows.
+
