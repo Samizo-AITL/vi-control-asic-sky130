@@ -3,6 +3,7 @@ layout: default
 title: "Control Model Overview"
 nav_order: 2
 parent: "Documentation"
+permalink: /docs/01_control_model/
 ---
 
 ## 🧮 Control Model (Overview)
