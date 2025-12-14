@@ -64,10 +64,24 @@ The intent is to clarify **what each figure proves**, and **why similar-looking 
 
 ## A.6 Gate-level Simulation (Functional)
 
-| No. | Figure | Description |
-|---|---|---|
-| A-12 | <img src="http://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/gate_sim/reset_seq.png" width="30%"> | Gate-level **functional simulation**: reset and initialization sequence after OpenLane place-and-route. Confirms correct synchronous reset release and FSM entry into INIT state. |
-| A-13 | <img src="http://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/gate_sim/waveform_ok.png" width="30%"> | Gate-level **functional simulation**: normal operation waveform. FSM state transitions and control output match RTL simulation cycle-by-cycle, confirming logical equivalence. |
+Gate-level functional simulation figures are **not included** in this documentation.
+
+Although gate-level simulation was investigated after OpenLane
+place-and-route completion, it was determined that:
+
+- The SKY130 standard cell libraries rely on UDP-based Verilog models
+- These models are not fully supported by Icarus Verilog
+- As a result, reliable gate-level functional simulation was not feasible
+
+This is a **tool limitation**, not a design issue.
+
+Functional correctness is instead ensured by:
+
+- RTL functional simulation
+- Static Timing Analysis (STA)
+- DRC / LVS clean physical verification
+
+Therefore, no waveform figures are provided for this phase.
 
 ---
 
