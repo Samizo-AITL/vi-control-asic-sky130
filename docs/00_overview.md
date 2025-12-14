@@ -90,27 +90,24 @@ V[n], I[n]
 
 ## 🧠 RTL-Level Architecture (Actual Implementation)
 
-The following figure shows the **logical RTL block structure**
-used in this project.
+The following figure shows the **top-level RTL behavior**
+of the V–I control system, verified by RTL simulation.
 
 <img
-  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/architecture/vi_control_block_diagram.png"
-  alt="V–I Control RTL block diagram"
+  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/openlane/tb_vi_control_fsm_01.png"
+  alt="RTL-level control overview"
   style="width:60%;"
 />
 
-This architecture reflects the actual RTL hierarchy:
+This view reflects the actual integration of:
 
 - Register interface (SPI)
 - Fixed-point PID core
 - FSM supervisor
 - PWM generator
 
-Each block is implemented as a **cycle-accurate Verilog module**
-and verified independently.
-
-> Detailed waveform-based verification results are collected in  
-> **[Appendix A: Figure List](appendix_figures.md)**.
+> This figure is used here **only to illustrate block interaction**.  
+> Detailed signal-level verification is provided in **Appendix A**.
 
 ---
 
@@ -120,9 +117,9 @@ The control behavior is governed by a **hardware finite-state machine (FSM)**
 with explicit operating states.
 
 <img
-  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/architecture/fsm_state_diagram.png"
-  alt="FSM state transition diagram"
-  style="width:50%;"
+  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/openlane/tb_vi_control_fsm_state_01.png"
+  alt="FSM state transitions"
+  style="width:60%;"
 />
 
 The FSM enforces:
@@ -132,9 +129,6 @@ The FSM enforces:
 - Immediate FAULT handling
 
 All state transitions are **fully synchronous and cycle-accurate**.
-
-> FSM internal signals and timing behavior are verified by RTL simulation  
-> and documented in **Appendix A**.
 
 ---
 
@@ -151,20 +145,8 @@ The FSM explicitly defines the following states:
 - `FAULT`  
   Latched error condition requiring explicit clear
 
-This explicit state modeling is a key advantage of
-**ASIC-based control systems** over MCU-based implementations.
-
----
-
-## 📎 Appendix Reference
-
-All waveform figures, comparison cases, layout inspection images,
-and GDS views are collected in the appendix:
-
-➡️ **[Appendix A: Figure List](appendix_figures.md)**
-
-The appendix serves as the **authoritative index** for
-verification and implementation figures.
+> Waveform-level FSM verification results are collected in  
+> **[Appendix A: Figure List](appendix_figures.md)**.
 
 ---
 
