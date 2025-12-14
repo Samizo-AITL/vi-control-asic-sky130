@@ -257,3 +257,22 @@ You have reached the end of the core documentation.
 If you understand every chapter in this project,
 you understand how to design, verify,
 and implement a real digital control ASIC.
+
+---
+
+## ➡️ Next
+
+Proceed to post-layout verification:
+
+➡️ **[Gate-level Simulation (Functional)](06_gate_sim_functional.md)**  
+
+The next chapter verifies logical equivalence
+between RTL and the post-place-and-route gate netlist.
+
+---
+
+## ⬅️ Navigation
+
+- 🔙 **[Documentation Index](index.md)**  
+- 🏠 **[Project Top](../index.md)**
+
