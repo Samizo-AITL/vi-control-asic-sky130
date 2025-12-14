@@ -34,7 +34,7 @@ The project is designed as both:
 Read the documents in the following order:
 
 1. **Overview**  
-   👉 [Overview](00_overview.md)  
+   👉 [Overview](docs/00_overview.md)  
    System concept, motivation, and design philosophy.
 
 2. **Control Model**  
