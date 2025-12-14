@@ -21,21 +21,21 @@ By the end of this chapter, you will understand:
 
 - What happens at each stage of the OpenLane flow
 - Why each step is required
-- How to interpret basic PPA results
-- How digital control logic maps onto silicon
+- How to interpret basic PPA (Performance / Power / Area) results
+- How digital control logic maps onto physical silicon
 
 ---
 
 ## 🧰 Toolchain Overview
 
-The OpenLane flow uses the following main components:
+The OpenLane flow integrates several open-source tools:
 
 - **Yosys** – RTL synthesis
-- **OpenROAD** – Floorplan, placement, CTS, routing
-- **Magic / KLayout** – Layout and DRC
-- **Netgen** – LVS
+- **OpenROAD** – Floorplanning, placement, CTS, routing
+- **Magic / KLayout** – Layout viewing and DRC
+- **Netgen** – LVS (Layout vs. Schematic)
 
-All steps target the **SKY130 open PDK**.
+All steps target the **SkyWater SKY130 open PDK**.
 
 ---
 
@@ -51,31 +51,30 @@ openlane/
    └─ runs/
 ```
 
-The config.tcl file defines
-clock, utilization, and design constraints.
+The `config.tcl` file defines clock parameters,
+utilization targets, and design constraints.
 
 ---
 
 ## ⚙️ Key Configuration Parameters
 
-Important parameters in config.tcl include:
+Important parameters in `config.tcl` include:
 
-DESIGN_NAME
-VERILOG_FILES
-CLOCK_PORT
-CLOCK_PERIOD
-FP_CORE_UTIL
+- `DESIGN_NAME`
+- `VERILOG_FILES`
+- `CLOCK_PORT`
+- `CLOCK_PERIOD`
+- `FP_CORE_UTIL`
 
 Example (conceptual):
 
-```
+```tcl
 set ::env(CLOCK_PORT) "clk"
 set ::env(CLOCK_PERIOD) "20.0"
 set ::env(FP_CORE_UTIL) 50
 ```
 
-These values directly affect
-timing, area, and routability.
+These values directly affect **timing, area, and routability**.
 
 ---
 
@@ -83,68 +82,78 @@ timing, area, and routability.
 
 During synthesis:
 
-RTL is translated into a gate-level netlist
-Flip-flops, adders, and multipliers are mapped to standard cells
+- RTL is translated into a gate-level netlist
+- Flip-flops, adders, and multipliers are mapped to standard cells
 
-Key outputs:
-Gate count
-Estimated timing
-Area estimate
-This is the first point where silicon cost becomes visible.
+Key outputs include:
+
+- Gate count
+- Estimated timing
+- Area estimate
+
+This is the first point where **silicon cost becomes visible**.
 
 ---
 
 ## 🧱 Step 2: Floorplanning
 
 Floorplanning defines:
-Core area size
-Aspect ratio
 
-IO pin placement
-Power grid strategy
+- Core area size
+- Aspect ratio
+- IO pin placement
+- Power grid strategy
 
 For control ASICs:
-Moderate utilization (40–60%) is recommended
-Simple rectangular layouts are sufficient
+
+- Moderate utilization (40–60%) is recommended
+- Simple rectangular layouts are usually sufficient
 
 ---
 
 ## 🧭 Step 3: Placement
 
 During placement:
-Standard cells are placed inside the core area
-Timing-driven optimization is applied
+
+- Standard cells are placed inside the core area
+- Timing-driven optimization is applied
 
 At this stage, you can observe:
-Cell density
-Early timing slack
-Congested regions
+
+- Cell density
+- Early timing slack
+- Congested regions
 
 ---
 
 ## ⏱ Step 4: Clock Tree Synthesis (CTS)
 
 CTS inserts clock buffers to ensure:
-Low skew
-Balanced clock distribution
+
+- Low skew
+- Balanced clock distribution
 
 For this design:
-Single clock domain
-No gated clocks
-This simplicity greatly improves robustness.
+
+- Single clock domain
+- No gated clocks
+
+This simplicity greatly improves robustness and timing closure.
 
 ---
 
 ## 🛣 Step 5: Routing
 
 Routing connects all placed cells:
-Global routing
-Detailed routing
 
-Key checks:
-No open nets
-Acceptable congestion
-Reasonable wire lengths
+- Global routing
+- Detailed routing
+
+Key checks include:
+
+- No open or shorted nets
+- Acceptable congestion
+- Reasonable wire lengths
 
 ---
 
@@ -152,38 +161,42 @@ Reasonable wire lengths
 
 Final sign-off checks:
 
-DRC (Design Rule Check):
-Ensures layout follows manufacturing rules
+### DRC (Design Rule Check)
+Ensures the layout follows all manufacturing rules.
 
-LVS (Layout vs. Schematic):
-Ensures layout matches the netlist
+### LVS (Layout vs. Schematic)
+Ensures the layout matches the synthesized netlist.
 
-Passing both checks is mandatory
-for tapeout readiness.
+Passing both checks is mandatory for **tapeout readiness**.
 
 ---
 
 ## 📊 PPA Analysis
 
 After completion, evaluate:
-Performance: Maximum clock frequency
-Power: Estimated dynamic and leakage power
-Area: Core and die size
+
+- **Performance**: Maximum achievable clock frequency
+- **Power**: Estimated dynamic and leakage power
+- **Area**: Core and die size
 
 For educational control ASICs:
-Performance margins are usually generous
-Area is dominated by arithmetic units
-Power is modest due to low frequency
+
+- Performance margins are usually generous
+- Area is dominated by arithmetic units
+- Power is modest due to low operating frequency
+
+---
 
 ## 🧠 Educational Insight
 
 Seeing RTL transformed into geometry
-is a critical learning moment.
+is a critical learning milestone.
 
 At this point, you should be able to:
-Point to where the PID logic lives on silicon
-Relate control complexity to chip area
-Understand timing as a physical property
+
+- Point to where the PID logic resides on silicon
+- Relate control complexity to chip area
+- Understand timing as a physical, not abstract, property
 
 ---
 
@@ -205,20 +218,26 @@ This is the essence of practical digital ASIC design.
 
 ## 🖼 Final Layout (GDS → Magic)
 
-![OpenLane Final Layout Overview](assets/images/openlane/spm_layout_overview.png)
+<img
+  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/openlane/spm_layout_overview.png"
+  alt="OpenLane final layout overview"
+  style="width:80%;"
+/>
 
-The figure above shows the final placed-and-routed layout generated by OpenLane
-and visualized using Magic on the SKY130 process.
+The figure above shows the final placed-and-routed layout
+generated by OpenLane and visualized using **Magic**
+on the SKY130 process.
 
 ---
 
 ## 📌 Next Steps (Optional)
 
 Possible extensions include:
-Adding SPI register interfaces
-Integrating test features
-Exploring alternative clock periods
-Tapeout via MPW services
+
+- Adding SPI register interfaces
+- Integrating test and debug features
+- Exploring alternative clock periods
+- Tapeout via MPW shuttle services
 
 ---
 
@@ -227,10 +246,5 @@ Tapeout via MPW services
 You have reached the end of the core documentation.
 
 If you understand every chapter in this project,
-you understand how to build a real control ASIC.
-
-
-
-
-
-
+you understand how to design, verify,
+and implement a real digital control ASIC.
