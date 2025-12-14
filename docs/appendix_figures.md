@@ -62,6 +62,15 @@ The intent is to clarify **what each figure proves**, and **why similar-looking 
 
 ---
 
+## A.6 Gate-level Simulation (Functional)
+
+| No. | Figure | Description |
+|---|---|---|
+| A-12 | <img src="http://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/gate_sim/reset_seq.png" width="30%"> | Gate-level **functional simulation**: reset and initialization sequence after OpenLane place-and-route. Confirms correct synchronous reset release and FSM entry into INIT state. |
+| A-13 | <img src="http://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/gate_sim/waveform_ok.png" width="30%"> | Gate-level **functional simulation**: normal operation waveform. FSM state transitions and control output match RTL simulation cycle-by-cycle, confirming logical equivalence. |
+
+---
+
 ## Notes
 
 - Figures that appear visually similar are **intentionally included** for:
