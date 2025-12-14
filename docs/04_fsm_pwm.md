@@ -218,11 +218,23 @@ This transparency is a major advantage of ASIC-based control design.
 
 ---
 
+---
+
 ## ➡️ Next
 
-Proceed to the final implementation stage:
+Proceed to physical implementation:
 
-➡️ **[OpenLane Flow](05_openlane_flow.md)**
+➡️ **[OpenLane Flow](05_openlane_flow.md)**  
+
+The next chapter turns RTL into placed, routed,
+and verified silicon using OpenLane.
+
+---
+
+## ⬅️ Navigation
+
+- 🔙 **[Documentation Index](index.md)**  
+- 🏠 **[Project Top](../index.md)**
 
 The next chapter turns RTL into placed, routed,
 and verified silicon.
