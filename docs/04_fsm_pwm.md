@@ -199,6 +199,9 @@ Recommended verification steps include:
 
 Waveform inspection is strongly recommended.
 
+> Detailed verification waveforms for FSM and PWM behavior  
+> are provided in **[Appendix A: Figure List](appendix_figures.md)**.
+
 ---
 
 ## 📘 Educational Insight
