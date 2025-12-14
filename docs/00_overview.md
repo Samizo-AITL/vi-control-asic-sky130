@@ -219,10 +219,16 @@ you understand the essence of a practical control ASIC.
 
 ## ➡️ Next
 
-Proceed to:
+Proceed to the control formulation:
 
-➡️ **[Control Model Overview](01_control_model.md)**  
+➡️ **[Control Model](01_control_model.md)**  
 
-Start from the equations.  
-Everything else follows.
+The next chapter introduces the discrete-time
+V–I based PID control model used throughout this design.
 
+---
+
+## ⬅️ Navigation
+
+- 🔙 **[Documentation Index](index.md)**  
+- 🏠 **[Project Top](../index.md)**
