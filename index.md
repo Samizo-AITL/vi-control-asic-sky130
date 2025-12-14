@@ -254,7 +254,7 @@ Then build the silicon.**
 
 ## GDS Layout (OpenLane + SKY130)
 
-<img src="/docs/layout/vi_control_top_gds_overview.png" width="80%">
+<img src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/layout/vi_control_top_gds_overview.png" width="80%">
 
 - Tool: OpenLane (superstable)
 - PDK: SKY130A
