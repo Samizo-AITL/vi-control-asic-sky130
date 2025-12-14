@@ -78,21 +78,42 @@ operate on bounded, dimensionless quantities.
 
 ## 🧩 Fixed-Point Data Path (Conceptual)
 
-The following figure shows how normalized V–I signals
-are processed through fixed-point arithmetic blocks
-before being converted into PWM timing.
+The fixed-point data path is defined **before RTL coding**
+to make numerical behavior explicit and analyzable.
 
-<img
-  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/openlane/tb_vi_control_github_rtl_01.png"
-  alt="Fixed-point datapath overview"
-  style="width:80%;"
-/>
+```
+V[n], I[n]  (Q1.15)
+   │
+   ▼
+Error computation
+e[n] = V_ref[n] − V[n]      (Q2.15)
+   │
+   ▼
++----------------------+
+| PID Computation      |
+|  - P term            |
+|  - I accumulator     |
+|  - D term (optional) |
++----------------------+
+   │   (bit growth)
+   ▼
+Saturation & truncation
+   │
+   ▼
+u[n]  (Q2.15)
+   │
+   ▼
+PWM mapping
+```
 
-This structure clarifies where:
+This conceptual data path explicitly defines:
 
-- bit growth occurs
-- saturation must be applied
-- state variables are stored
+- where bit growth occurs
+- where saturation is applied
+- which signals are stored as state
+
+RTL waveforms confirming this behavior are provided in  
+**[Appendix A: Figure List](appendix_figures.md)**.
 
 ---
 
