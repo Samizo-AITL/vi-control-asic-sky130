@@ -152,7 +152,16 @@ and every RTL block can be traced to the final layout.
 
 ## ➡️ Next
 
-Proceed to:
+Proceed to numerical implementation details:
 
-- [`Fixed-Point Design`](02_fixed_point.md)
-- [`RTL PID Core`](03_rtl_pid.md)
+➡️ **[Fixed-Point Design](02_fixed_point.md)**  
+
+The next chapter explains fixed-point representation,
+scaling, saturation, and overflow handling.
+
+---
+
+## ⬅️ Navigation
+
+- 🔙 **[Documentation Index](index.md)**  
+- 🏠 **[Project Top](../index.md)**
