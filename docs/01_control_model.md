@@ -52,31 +52,33 @@ by **external ADCs** and provided to the ASIC synchronously.
 
 ---
 
-## 🧠 Digital Control Architecture
+## 🧠 Digital Control Architecture (Conceptual)
 
-The control core is composed of **three deterministic hardware blocks**.
+The digital control system is conceptually composed of
+three deterministic processing stages.
 
-<img
-  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/assets/images/openlane/tb_vi_control_fsm_01.png"
-  alt="V–I Control Digital Architecture"
-  style="width:80%;"
-/>
+e[n]
+ │
+ ▼
++----------------+
+| PID Controller |  (fixed-point)
++----------------+
+ │ u[n]
+ ▼
++----------------+
+| FSM Supervisor |  (INIT / RUN / FAULT)
++----------------+
+ │
+ ▼
++----------------+
+| PWM Generator  |
++----------------+
 
-### Block Responsibilities
+This conceptual structure is **independent of implementation details**
+and serves as the basis for fixed-point design and RTL mapping.
 
-- **PID Core**  
-  Fixed-point computation of the control law
-
-- **FSM Supervisor**  
-  Operating modes:
-  - `INIT`
-  - `RUN`
-  - `FAULT`
-
-- **PWM Generator**  
-  Converts $u[n]$ to PWM duty or timing signals
-
-All blocks share a **single deterministic control clock**.
+> RTL waveforms and implementation-level verification results
+> are provided separately in **Appendix A**.
 
 ---
 
