@@ -1,139 +1,113 @@
 ---
 layout: default
-title: Documentation
+title: "V–I Control ASIC on SKY130"
 nav_order: 1
-has_children: true
 ---
 
-# 📘 V–I Control ASIC on SKY130  
-**PID + FSM + PWM — RTL to GDS using OpenLane**
-
----
-
-## 🎯 Overview
-
-This documentation describes a **complete, verified digital control ASIC**
-based on **Voltage–Current (V–I) feedback**, implemented using:
-
-- Fixed-point **PID control**
-- Deterministic **FSM supervision**
-- Hardware **PWM generation**
-- Full **RTL → GDS** flow with **OpenLane**
-- **SkyWater SKY130** open PDK
-
-This is **not** a partial tutorial or tool demo.
-
-> It is a **finished ASIC design**, documented end-to-end,  
-> intended as both **educational reference** and **practical baseline**.
+# V–I Control ASIC on SKY130  
+**PID + FSM + PWM using OpenLane (Educational & Practical)**
 
 ---
 
-## 🔗 Official Project Links
+## 🔗 Official Links
 
-| Item | Link |
-|----|----|
-| 🌐 GitHub Pages (Docs) | https://samizo-aitl.github.io/vi-control-asic-sky130/docs/ |
+| Resource | Link |
+|---------|------|
+| 🌐 GitHub Pages | https://samizo-aitl.github.io/vi-control-asic-sky130/ |
 | 💻 GitHub Repository | https://github.com/Samizo-AITL/vi-control-asic-sky130 |
-| 💬 Discussions | https://github.com/Samizo-AITL/vi-control-asic-sky130/discussions |
 
 ---
 
-## 🧠 What This Project Teaches
+This repository provides a **complete, reproducible, and tapeout-oriented**
+example of a **digital control ASIC** based on **Voltage–Current (V–I) feedback**.
 
-By reading this documentation sequentially, you will understand:
+The design integrates:
 
-- How **V[n] / I[n] samples** are treated in digital control hardware
-- How a **discrete-time PID controller** is mapped into fixed-point RTL
-- How **FSM-based supervision** guarantees deterministic and safe behavior
-- How **PWM timing** is generated directly from control output
-- How functional correctness is verified at **RTL and gate level**
-- How to run a full **OpenLane RTL-to-GDS flow** on SKY130
+- **PID control** (fixed-point, deterministic)
+- **FSM-based supervision** (INIT / RUN / FAULT)
+- **PWM generation**
+- **RTL → GDS flow using OpenLane**
+- **SKY130 standard-cell technology**
 
-All **analog blocks (ADC/DAC)** are assumed **off-chip**.  
-This project focuses on **pure digital ASIC design**.
+This is **not a tutorial fragment** or tool demo.  
+It is a **finished and verified reference ASIC design**.
 
 ---
 
-## 🧩 Target Architecture (Conceptual)
+## 🎯 What This Project Is
+
+This project is both:
+
+- 📘 **Educational** — explaining *why* each design decision is made  
+- 🧩 **Practical** — showing *how* to implement a real control ASIC
+
+Scope:
+
+```
+Control Theory
+ → Fixed-Point Arithmetic
+   → RTL Design
+     → Verification
+       → OpenLane
+         → GDS
+```
+
+All analog blocks (ADC / DAC) are assumed **off-chip**.  
+The focus is **pure digital ASIC control logic**.
+
+---
+
+## 🧠 Architecture Overview
 
 ```
 V[n], I[n]   (from external ADC)
    │
    ▼
-+-------------+
-|  PID Core   |  ← Fixed-point arithmetic
-+-------------+
-       │ u[n]
-       ▼
-+-------------+
-|   FSM Ctrl  |  ← INIT / RUN / FAULT
-+-------------+
-       │
-       ▼
-+-------------+
-|  PWM Gen    |  ← Duty / timing output
-+-------------+
++-----------+
+| PID Core |  Fixed-point arithmetic
++-----------+
+     │ u[n]
+     ▼
++-----------+
+| FSM Ctrl |  INIT / RUN / FAULT supervision
++-----------+
+     │
+     ▼
++-----------+
+| PWM Gen |  Duty / timing output
++-----------+
 ```
 
 ---
 
-## 📚 Documentation Structure
+## 📚 Documentation
 
-Each chapter is a standalone Markdown file under `docs/`.
+All technical documentation lives under `docs/`.
 
-### 0️⃣ Overview
-➡️ **[00_overview.md](00_overview.md)**  
-Project motivation, scope, and design philosophy.
+➡️ **Start here:**  
+👉 [Documentation Index](docs/index.md)
 
-### 1️⃣ Control Model
-➡️ **[01_control_model.md](01_control_model.md)**  
-Discrete-time PID control using V–I feedback.
+The documentation is structured as a **linear design narrative**:
 
-### 2️⃣ Fixed-Point Design
-➡️ **[02_fixed_point.md](02_fixed_point.md)**  
-Q-format selection, scaling, saturation, and overflow handling.
-
-### 3️⃣ RTL: PID Core
-➡️ **[03_rtl_pid.md](03_rtl_pid.md)**  
-Cycle-accurate PID datapath in Verilog.
-
-### 4️⃣ RTL: FSM & PWM
-➡️ **[04_fsm_pwm.md](04_fsm_pwm.md)**  
-Supervisory FSM and PWM generation logic.
-
-### 5️⃣ OpenLane Flow
-➡️ **[05_openlane_flow.md](05_openlane_flow.md)**  
-Synthesis, placement, routing, STA, and layout inspection.
-
-### 6️⃣ Gate-level Simulation (Functional)
-➡️ **[06_gate_sim_functional.md](06_gate_sim_functional.md)**  
-Post-layout **functional** verification (logical equivalence, no timing).
+1. System overview and philosophy  
+2. Control model (PID with V–I feedback)  
+3. Fixed-point design methodology  
+4. RTL implementation  
+5. FSM supervision and PWM  
+6. OpenLane RTL-to-GDS flow  
+7. Gate-level functional verification  
+8. Appendix with complete figure index  
 
 ---
 
-## 📎 Appendix
+## ✅ Verification Status
 
-➡️ **[Appendix A: Figure List](appendix_figures.md)**  
+This project is **verification complete** within its defined scope.
 
-A complete index of **all waveforms, layouts, and verification figures**,  
-clarifying:
+### Completed
 
-- What each figure proves
-- Which verification phase it belongs to
-- Why similar-looking figures exist
-
-Highly recommended for reviewers.
-
----
-
-## ✅ Verification Strategy
-
-This project emphasizes **functional correctness with explicit timing guarantees**.
-
-### Performed
-
-- ✅ RTL functional simulation (Icarus Verilog)
-- ✅ PID step-response verification (P / PI)
+- ✅ RTL functional simulation
+- ✅ PID step response verification (P / PI)
 - ✅ FSM state transition verification
 - ✅ PWM duty and timing verification
 - ✅ Gate-level **functional** simulation (post-layout)
@@ -142,39 +116,43 @@ This project emphasizes **functional correctness with explicit timing guarantees
 
 ### Intentionally Omitted
 
-- ⏭ Gate-level **timing-aware** simulation
+- ⏭ Gate-level **timing simulation**  
+  (STA used instead; UDP-based SKY130 models are not simulator-friendly)
 
-**Reason:**  
-Timing correctness is guaranteed by STA,  
-and SKY130 UDP-based cell models are not simulator-friendly.
-
-This reflects **realistic industry practice**.
+This reflects **real-world ASIC development practice**.
 
 ---
 
-## 🖼 Final GDS (Physical Deliverable)
+## 🖼 Physical Implementation
 
 <img
-  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/layout/vi_control_top_gds_overview.png"
+  src="docs/layout/vi_control_top_gds_overview.png"
   alt="GDS layout overview"
   style="width:85%;"
 />
 
 - Tool: OpenLane
 - PDK: SKY130A
-- Status: DRC / LVS clean, STA closed
+- Status: DRC / LVS clean, GDS generated
+
+---
+
+## 🎓 Intended Audience
+
+- Students learning digital control and ASIC design
+- Engineers moving from MCU-based to hardware control
+- Educators building semiconductor coursework
+- Developers evaluating OpenLane + SKY130
 
 ---
 
 ## 👤 Author
 
 **Shinichi Samizo**  
-M.S. Electrical & Electronic Engineering (Shinshu University)
+M.S., Electrical and Electronic Engineering (Shinshu University)
 
-- Former Engineer, **Seiko Epson Corporation**
-- Semiconductor logic / memory / HV mixed-signal
-- Inkjet MEMS & PrecisionCore productization
-- Control hardware architecture & education
+Former engineer at **Seiko Epson Corporation**  
+(semiconductor logic / memory / mixed-signal, inkjet systems)
 
 GitHub: https://github.com/Samizo-AITL  
 Email: shin3t72@gmail.com
@@ -184,17 +162,12 @@ Email: shin3t72@gmail.com
 ## 📄 License
 
 | Item | License |
-|----|----|
+|------|---------|
 | Source Code | MIT |
-| Text & Documentation | CC BY 4.0 / CC BY-SA 4.0 |
-| Figures & Diagrams | CC BY-NC 4.0 |
-| External References | Original license applies |
+| Documentation | CC BY 4.0 / CC BY-SA 4.0 |
+| Figures | CC BY-NC 4.0 |
 
 ---
 
-> **Conclusion**  
-> This documentation represents a **complete, reproducible, and verified**
-> digital control ASIC design on SKY130.
->
-> If you understand every chapter,  
-> you understand the essence of a **practical control ASIC**.
+➡️ **Next:**  
+👉 [Documentation Index](docs/index.md)
