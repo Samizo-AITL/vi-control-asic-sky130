@@ -1,12 +1,5 @@
----
-layout: default
-title: Documentation Index
-nav_order: 1
----
-
-# intersample-supervisory-control
-
-Supervisory FSM design for discrete-time control instability caused by intersample disturbances and sampling-period variations.
+# V–I Control ASIC on SKY130  
+**PID + FSM + PWM using OpenLane (Educational & Practical)**
 
 ---
 
@@ -14,152 +7,48 @@ Supervisory FSM design for discrete-time control instability caused by intersamp
 
 | Language | GitHub Pages 🌐 | GitHub 💻 |
 |----------|----------------|-----------|
-| 🇺🇸 English | [![GitHub Pages EN](https://img.shields.io/badge/GitHub%20Pages-English-brightgreen?logo=github)](https://samizo-aitl.github.io/intersample-supervisory-control/) | [![GitHub Repo EN](https://img.shields.io/badge/GitHub-English-blue?logo=github)](https://github.com/Samizo-AITL/intersample-supervisory-control/tree/main) |
+| 🇺🇸 English | [![GitHub Pages EN](https://img.shields.io/badge/GitHub%20Pages-English-brightgreen?logo=github)](https://samizo-aitl.github.io/vi-control-asic-sky130/) | [![GitHub Repo EN](https://img.shields.io/badge/GitHub-English-blue?logo=github)](https://github.com/Samizo-AITL/vi-control-asic-sky130/tree/main) |
 
 ---
 
-## Overview
+This repository provides a **clear, minimal, and tapeout-ready example**
+of a **digital control ASIC** based on **Voltage–Current (V–I) feedback**,
+implemented with **PID control, FSM supervision, and PWM generation**
+using **OpenLane** and **SkyWater SKY130**.
 
-This repository demonstrates **why a theoretically stable discrete-time PID controller can become unstable in real implementations**, and how a **supervisory finite state machine (FSM)** can mitigate such failures.
-
-The focus is not on PID tuning itself, but on **architectural supervision**:
-detecting early signs of instability caused by **intersample disturbances**, **sampling-period variations**, and **implementation-side delays**, and switching control modes accordingly.
-
-This reflects real-world control failures observed in embedded systems, industrial automation, and manufacturing equipment.
-
----
-
-## Problem Statement
-
-In discrete-time control systems:
-
-- Control inputs are updated only at sampling instants
-- The plant evolves continuously between samples
-- Disturbances and nonlinear effects may occur **between samples**
-
-As a result:
-
-- State deviations may grow unnoticed
-- Effective phase margin degrades
-- Integral windup, oscillations, or limit cycles may occur
-
-These failures can arise **even when the discrete-time closed-loop system is theoretically stable**.
+The project is designed as both:
+- 📘 **Educational material** (control theory → RTL → GDS)
+- 🧩 **Practical ASIC prototype** (MCU offloading / deterministic control)
 
 ---
 
-## Key Idea
+## 🔑 Key Concepts
 
-This repository introduces a **supervisory FSM layer** placed outside the PID loop:
+- **Inputs**  
+  - Voltage: `V[n]` (digital samples from external ADC)  
+  - Current: `I[n]` (digital samples from external ADC)
 
-- **PID** handles continuous regulation under nominal conditions
-- **FSM** monitors instability indicators and supervises control modes
-- (Optional extension) **Higher-level reasoning** can be layered on top
+- **Outputs**  
+  - Control signal: `u[n]` → PWM duty / timing  
+  - Protection & status flags (OV / OC / FAULT)
 
-The FSM does not replace the PID controller.
-It **protects the system when assumptions behind the PID design are violated**.
+- **Architecture**  
+  - PID controller (fixed-point, deterministic latency)  
+  - FSM-based supervision (INIT / RUN / FAULT)  
+  - PWM generator  
+  - Register interface (SPI / GPIO)
 
----
-
-## System Architecture
-
-```
-+----------------------------+
-| Supervisory FSM Layer |
-| - Instability detection |
-| - Mode switching |
-+-------------+---------------+
-|
-+-------------v---------------+
-| PID Controller |
-| (Discrete-time, ZOH) |
-+-------------+---------------+
-|
-+-------------v---------------+
-| Plant |
-| (Continuous-time dynamics) |
-+-----------------------------+
-```
----
-
-# Instability Indicators (Examples)
-
-The FSM monitors observable signals such as:
-
-- Tracking error growth (moving average or rate)
-- Sign changes indicating oscillatory behavior
-- Control input saturation or excessive variation
-- Degradation of apparent damping
-
-FSM transitions are triggered by **early instability indicators**, not by complete loss of stability.
+> All analog V–I conversion is intentionally kept **off-chip**.  
+> This repository focuses on **pure digital design**, fully compatible with
+> OpenLane and SKY130 standard cells.
 
 ---
 
-## FSM Control Modes
+## 🎯 Project Goals
 
-A minimal configuration includes:
-
-- **NORMAL**  
-  Nominal PID control
-
-- **DEGRADED**  
-  Conservative gains, integral suppression, or reduced bandwidth
-
-- **SAFE**  
-  Output limiting, ramp-down, or hold behavior
-
-Hysteresis is used to prevent mode chattering.
+- Provide a **step-by-step ASIC design example**:
 
 ---
-
-## Demonstration Scenario
-
-Typical experiments include:
-
-- Gradually increasing the sampling period \( T_s \)
-- Injecting intersample disturbances
-- Observing:
-  - Output response
-  - Control input behavior
-  - FSM state transitions
-
-The emphasis is on **how and when the supervisory layer intervenes**.
-
----
-
-##　Scope and Non-Goals
-
-This repository intentionally avoids:
-
-- Advanced PID auto-tuning
-- Optimal or adaptive control design
-- Machine-learning-based controllers
-
-The goal is **architectural clarity**, not algorithmic novelty.
-
----
-
-## Intended Audience
-
-This project is intended for:
-
-- Control system designers
-- Embedded and real-time control engineers
-- Industrial automation and equipment developers
-- Engineers who have experienced "the controller works on paper, but fails in practice"
-
----
-
-## License
-
-MIT License
-
----
-
-## Author
-
-Shinichi Samizo  
-(Design philosophy: PID × FSM × Supervisory architectures)
-
 
 ## 👤 Author
 
