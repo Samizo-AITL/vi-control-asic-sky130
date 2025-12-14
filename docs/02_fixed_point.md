@@ -239,8 +239,6 @@ This ensures numerical correctness **before synthesis**.
 
 ---
 
----
-
 ## ➡️ Next
 
 Proceed to RTL implementation:
