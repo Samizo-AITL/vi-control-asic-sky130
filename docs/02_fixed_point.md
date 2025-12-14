@@ -3,6 +3,7 @@ layout: default
 title: "Fixed-Point Design"
 nav_order: 3
 parent: "Documentation"
+permalink: /docs/02_fixed_point/
 ---
 
 # 🔢 Fixed-Point Design for V–I Control
