@@ -57,6 +57,7 @@ by **external ADCs** and provided to the ASIC synchronously.
 The digital control system is conceptually composed of
 three deterministic processing stages.
 
+```
 e[n]
  │
  ▼
@@ -73,6 +74,7 @@ e[n]
 +----------------+
 | PWM Generator  |
 +----------------+
+```
 
 This conceptual structure is **independent of implementation details**
 and serves as the basis for fixed-point design and RTL mapping.
