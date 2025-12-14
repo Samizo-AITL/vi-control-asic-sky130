@@ -113,7 +113,7 @@ The control behavior is governed by a **hardware FSM**
 with explicit operating states.
 
 <img
-  src="/vi-control-asic-sky130/assets/images/openlane/tb_vi_control_fsm_01.png"
+  src="https://samizo-aitl.github.io/vi-control-asic-sky130/assets/images/openlane/tb_vi_control_fsm_01.png"
   alt="FSM overview"
   style="width:80%;"
 />
@@ -131,7 +131,7 @@ The FSM enforces:
 The explicit FSM state transitions are shown below.
 
 <img
-  src="/vi-control-asic-sky130/assets/images/openlane/tb_vi_control_fsm_state_01.png"
+  src="https://samizo-aitl.github.io/vi-control-asic-sky130/assets/images/openlane/tb_vi_control_fsm_state_01.png"
   alt="FSM state diagram"
   style="width:80%;"
 />
