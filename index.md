@@ -1,123 +1,200 @@
 ---
 layout: default
-title: Documentation Index
+title: Documentation
 nav_order: 1
+has_children: true
 ---
 
-# V–I Control ASIC on SKY130  
-**PID + FSM + PWM using OpenLane (Educational & Practical)**
-
----
-
-## 🔗 Official Links
-
-| Language | GitHub Pages 🌐 | GitHub 💻 |
-|----------|----------------|-----------|
-| 🇺🇸 English | https://samizo-aitl.github.io/vi-control-asic-sky130/docs/ | https://github.com/Samizo-AITL/vi-control-asic-sky130/tree/main |
+# 📘 V–I Control ASIC on SKY130  
+**PID + FSM + PWM — RTL to GDS using OpenLane**
 
 ---
 
-This repository provides a **complete, reproducible, and tapeout-ready example**
-of a **digital control ASIC** based on **Voltage–Current (V–I) feedback**,
-implemented with **PID control, FSM supervision, and PWM generation**
-using **OpenLane** and **SkyWater SKY130**.
+## 🎯 Overview
 
-This is **not a partial experiment** or a tool demonstration.  
-It documents a **finished and verified RTL-to-GDS ASIC design**.
+This documentation describes a **complete, verified digital control ASIC**
+based on **Voltage–Current (V–I) feedback**, implemented using:
 
----
+- Fixed-point **PID control**
+- Deterministic **FSM supervision**
+- Hardware **PWM generation**
+- Full **RTL → GDS** flow with **OpenLane**
+- **SkyWater SKY130** open PDK
 
-## 📚 Documentation Roadmap
+This is **not** a partial tutorial or tool demo.
 
-1. Overview  
-   - docs/00_overview.md
-
-2. Control Model  
-   - docs/01_control_model.md
-
-3. Fixed-Point Design  
-   - docs/02_fixed_point.md
-
-4. RTL: PID Core  
-   - docs/03_rtl_pid.md
-
-5. RTL: FSM & PWM  
-   - docs/04_fsm_pwm.md
-
-6. OpenLane Flow  
-   - docs/05_openlane_flow.md
-
-7. Gate-level Simulation (Functional)  
-   - docs/06_gate_sim_functional.md
-
-8. Appendix A: Figure List  
-   - docs/appendix_figures.md
+> It is a **finished ASIC design**, documented end-to-end,  
+> intended as both **educational reference** and **practical baseline**.
 
 ---
 
-## 🎯 Project Goal
+## 🔗 Official Project Links
 
-Provide a full ASIC design reference:
-
-Control Theory  
-→ Fixed-Point Design  
-→ RTL  
-→ FSM & PWM  
-→ OpenLane  
-→ GDS
+| Item | Link |
+|----|----|
+| 🌐 GitHub Pages (Docs) | https://samizo-aitl.github.io/vi-control-asic-sky130/docs/ |
+| 💻 GitHub Repository | https://github.com/Samizo-AITL/vi-control-asic-sky130 |
+| 💬 Discussions | https://github.com/Samizo-AITL/vi-control-asic-sky130/discussions |
 
 ---
 
-## 📁 Repository Structure
+## 🧠 What This Project Teaches
 
-vi-control-asic-sky130/
-├─ README.md  
-├─ docs/  
-│  ├─ index.md  
-│  ├─ 00_overview.md  
-│  ├─ 01_control_model.md  
-│  ├─ 02_fixed_point.md  
-│  ├─ 03_rtl_pid.md  
-│  ├─ 04_fsm_pwm.md  
-│  ├─ 05_openlane_flow.md  
-│  ├─ 06_gate_sim_functional.md  
-│  └─ appendix_figures.md  
-│  
-├─ rtl/  
-├─ sim/  
-├─ openlane/  
-└─ scripts/  
+By reading this documentation sequentially, you will understand:
+
+- How **V[n] / I[n] samples** are treated in digital control hardware
+- How a **discrete-time PID controller** is mapped into fixed-point RTL
+- How **FSM-based supervision** guarantees deterministic and safe behavior
+- How **PWM timing** is generated directly from control output
+- How functional correctness is verified at **RTL and gate level**
+- How to run a full **OpenLane RTL-to-GDS flow** on SKY130
+
+All **analog blocks (ADC/DAC)** are assumed **off-chip**.  
+This project focuses on **pure digital ASIC design**.
 
 ---
 
-## ✅ Verification Status
+## 🧩 Target Architecture (Conceptual)
 
-- RTL functional simulation: COMPLETED  
-- PID step response (P / PI): VERIFIED  
-- FSM state transitions: VERIFIED  
-- PWM timing: VERIFIED  
-- STA timing closure: PASSED  
-- DRC / LVS: CLEAN  
+```
+V[n], I[n]   (from external ADC)
+   │
+   ▼
++-------------+
+|  PID Core   |  ← Fixed-point arithmetic
++-------------+
+       │ u[n]
+       ▼
++-------------+
+|   FSM Ctrl  |  ← INIT / RUN / FAULT
++-------------+
+       │
+       ▼
++-------------+
+|  PWM Gen    |  ← Duty / timing output
++-------------+
+```
 
-Gate-level timing simulation was intentionally omitted.
-Timing correctness is guaranteed by STA.
+---
+
+## 📚 Documentation Structure
+
+Each chapter is a standalone Markdown file under `docs/`.
+
+### 0️⃣ Overview
+➡️ **[00_overview.md](00_overview.md)**  
+Project motivation, scope, and design philosophy.
+
+### 1️⃣ Control Model
+➡️ **[01_control_model.md](01_control_model.md)**  
+Discrete-time PID control using V–I feedback.
+
+### 2️⃣ Fixed-Point Design
+➡️ **[02_fixed_point.md](02_fixed_point.md)**  
+Q-format selection, scaling, saturation, and overflow handling.
+
+### 3️⃣ RTL: PID Core
+➡️ **[03_rtl_pid.md](03_rtl_pid.md)**  
+Cycle-accurate PID datapath in Verilog.
+
+### 4️⃣ RTL: FSM & PWM
+➡️ **[04_fsm_pwm.md](04_fsm_pwm.md)**  
+Supervisory FSM and PWM generation logic.
+
+### 5️⃣ OpenLane Flow
+➡️ **[05_openlane_flow.md](05_openlane_flow.md)**  
+Synthesis, placement, routing, STA, and layout inspection.
+
+### 6️⃣ Gate-level Simulation (Functional)
+➡️ **[06_gate_sim_functional.md](06_gate_sim_functional.md)**  
+Post-layout **functional** verification (logical equivalence, no timing).
+
+---
+
+## 📎 Appendix
+
+➡️ **[Appendix A: Figure List](appendix_figures.md)**  
+
+A complete index of **all waveforms, layouts, and verification figures**,  
+clarifying:
+
+- What each figure proves
+- Which verification phase it belongs to
+- Why similar-looking figures exist
+
+Highly recommended for reviewers.
+
+---
+
+## ✅ Verification Strategy
+
+This project emphasizes **functional correctness with explicit timing guarantees**.
+
+### Performed
+
+- ✅ RTL functional simulation (Icarus Verilog)
+- ✅ PID step-response verification (P / PI)
+- ✅ FSM state transition verification
+- ✅ PWM duty and timing verification
+- ✅ Gate-level **functional** simulation (post-layout)
+- ✅ Static Timing Analysis (STA) closure
+- ✅ DRC / LVS clean (OpenLane)
+
+### Intentionally Omitted
+
+- ⏭ Gate-level **timing-aware** simulation
+
+**Reason:**  
+Timing correctness is guaranteed by STA,  
+and SKY130 UDP-based cell models are not simulator-friendly.
+
+This reflects **realistic industry practice**.
+
+---
+
+## 🖼 Final GDS (Physical Deliverable)
+
+<img
+  src="https://samizo-aitl.github.io/vi-control-asic-sky130/docs/layout/vi_control_top_gds_overview.png"
+  alt="GDS layout overview"
+  style="width:85%;"
+/>
+
+- Tool: OpenLane
+- PDK: SKY130A
+- Status: DRC / LVS clean, STA closed
 
 ---
 
 ## 👤 Author
 
-Shinichi Samizo  
-M.S. Electrical and Electronic Engineering  
-Former Engineer, Seiko Epson Corporation
+**Shinichi Samizo**  
+M.S. Electrical & Electronic Engineering (Shinshu University)
+
+- Former Engineer, **Seiko Epson Corporation**
+- Semiconductor logic / memory / HV mixed-signal
+- Inkjet MEMS & PrecisionCore productization
+- Control hardware architecture & education
+
+GitHub: https://github.com/Samizo-AITL  
+Email: shin3t72@gmail.com
 
 ---
 
 ## 📄 License
 
-Source Code: MIT  
-Documentation: CC BY 4.0 / CC BY-SA 4.0  
-Figures: CC BY-NC 4.0  
+| Item | License |
+|----|----|
+| Source Code | MIT |
+| Text & Documentation | CC BY 4.0 / CC BY-SA 4.0 |
+| Figures & Diagrams | CC BY-NC 4.0 |
+| External References | Original license applies |
 
 ---
 
-END OF DOCUMENT
+> **Conclusion**  
+> This documentation represents a **complete, reproducible, and verified**
+> digital control ASIC design on SKY130.
+>
+> If you understand every chapter,  
+> you understand the essence of a **practical control ASIC**.
