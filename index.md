@@ -13,7 +13,7 @@ nav_order: 1
 
 | Language | GitHub Pages 🌐 | GitHub 💻 |
 |----------|----------------|-----------|
-| 🇺🇸 English | [GitHub Pages](https://samizo-aitl.github.io/vi-control-asic-sky130/) | [GitHub Repository](https://github.com/Samizo-AITL/vi-control-asic-sky130) |
+| 🇺🇸 English | [![GitHub Pages EN](https://img.shields.io/badge/GitHub%20Pages-English-brightgreen?logo=github)](https://samizo-aitl.github.io/vi-control-asic-sky130/) | [![GitHub Repo EN](https://img.shields.io/badge/GitHub-English-blue?logo=github)](https://github.com/Samizo-AITL/vi-control-asic-sky130/tree/main) |
 
 ---
 
