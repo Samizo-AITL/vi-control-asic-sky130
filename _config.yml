@@ -1,9 +1,9 @@
-title: "intersample-supervisory-control"
+title: "vi-control-asic-sky130"
 description: "  "
 lang: en
 
 url: "https://samizo-aitl.github.io"
-baseurl: "/intersample-supervisory-control"
+baseurl: "/vi-control-asic-sky130"
 
 # NO THEME — custom layout only
 theme: null
