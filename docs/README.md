@@ -9,12 +9,14 @@ has_children: true
 
 Welcome to the documentation for **V–I Control ASIC on SKY130**.
 
-This documentation is designed to guide you step by step through the complete flow:
+This documentation provides a **reproducible, end-to-end guide** covering:
 
-> **Control theory → Fixed-point design → RTL → OpenLane → GDS**
+> **Control theory → Fixed-point design → RTL → Verification → OpenLane → GDS**
 
 The goal is not only to explain *how* to design a control ASIC,  
-but also *why* each design decision is made.
+but also *why* each architectural and implementation decision is made.
+
+This material is written as **design documentation + educational reference**.
 
 ---
 
@@ -22,76 +24,101 @@ but also *why* each design decision is made.
 
 By following this documentation, you will understand:
 
-- How **Voltage (V)** and **Current (I)** signals are used in digital control
-- How a **PID controller** is implemented in fixed-point hardware
-- How an **FSM supervisor** ensures safe and deterministic operation
+- How **Voltage (V)** and **Current (I)** signals are represented in digital control
+- How a **discrete-time PID controller** is implemented in fixed-point hardware
+- How an **FSM supervisor** enforces safe and deterministic operation
 - How **PWM signals** are generated from digital control outputs
+- How functional correctness is verified using **RTL simulation**
 - How to run a full **RTL-to-GDS flow** using OpenLane and SKY130
 
-This is a **digital-only** design.  
+This is a **digital-only ASIC design**.  
 All analog blocks (ADC / DAC) are assumed to be external.
 
 ---
 
-## 🧩 Target Architecture (Concept)
+## 🧩 Target Architecture (Conceptual View)
+
 ```
 V[n], I[n]
 │
 ▼
 +-----------+
-| PID | ← Fixed-point arithmetic
+| PID Core | ← Fixed-point arithmetic
 +-----------+
 │ u[n]
 ▼
 +-----------+
-| FSM | ← INIT / RUN / FAULT
+| FSM Ctrl | ← INIT / RUN / FAULT
 +-----------+
 │
 ▼
 +-----------+
-| PWM | ← Duty / timing output
+| PWM Gen | ← Duty / timing output
 +-----------+
 ```
 
-This architecture emphasizes:
-
-- Deterministic timing
-- Explicit safety handling
-- Clear mapping from equations to hardware
 
 ---
 
 ## 📚 Documentation Structure
 
-The documentation is organized as follows:
+Each chapter corresponds to one markdown file under `docs/`.
 
-1. **Overview**  
-   Concept, motivation, and system-level view
+### 0️⃣ Overview
+➡️ **[00_overview.md](00_overview.md)**  
+System concept, motivation, and overall design philosophy.
 
-2. **Control Model**  
-   Discrete-time PID control using V–I feedback
+### 1️⃣ Control Model
+➡️ **[01_control_model.md](01_control_model.md)**  
+Discrete-time PID control using V–I feedback.
 
-3. **Fixed-Point Design**  
-   Q-format selection, scaling, saturation, and overflow handling
+### 2️⃣ Fixed-Point Design
+➡️ **[02_fixed_point.md](02_fixed_point.md)**  
+Q-format selection, scaling, saturation, and overflow handling.
 
-4. **RTL Implementation**  
-   PID core, FSM supervisor, and PWM generator
+### 3️⃣ RTL: PID Core
+➡️ **[03_rtl_pid.md](03_rtl_pid.md)**  
+PID datapath, registers, and fixed-point arithmetic in Verilog.
 
-5. **SoC Integration**  
-   Registers, interfaces, and top-level integration
+### 4️⃣ RTL: FSM & PWM
+➡️ **[04_fsm_pwm.md](04_fsm_pwm.md)**  
+FSM supervisor, PWM generator, and safety behavior.
 
-6. **OpenLane Flow**  
-   Synthesis, place & route, and layout analysis
+### 5️⃣ OpenLane Flow
+➡️ **[05_openlane_flow.md](05_openlane_flow.md)**  
+Synthesis, place & route, STA, and layout inspection.
 
-Each chapter builds directly on the previous one.
+---
+
+## ✅ Verification Strategy
+
+This project focuses on **functional correctness at RTL level**:
+
+- RTL simulation with Icarus Verilog
+- Step-response verification (P / PI control)
+- FSM state transition checking
+- PWM duty and timing validation using GTKWave
+
+> **Note on Gate-Level Simulation**  
+> Gate-level simulation using SKY130 standard cells was investigated.  
+> However, due to **UDP-based cell models**  
+> (e.g. `sky130_fd_sc_hd__udp_*`) and tool limitations,  
+> full GLS is **not included** in this documentation.
+>
+> Instead, correctness is ensured via:
+> - RTL simulation
+> - Static Timing Analysis (STA) in OpenLane
+> - Post-layout inspection (Magic / GDS)
+
+This reflects a **realistic ASIC development trade-off**.
 
 ---
 
 ## 🛠 Prerequisites
 
-To follow this documentation, you should have basic knowledge of:
+You should have basic knowledge of:
 
-- Digital logic and Verilog
+- Digital logic and Verilog HDL
 - Control fundamentals (PID)
 - Linux command-line environment
 
@@ -101,29 +128,28 @@ No prior ASIC tapeout experience is required.
 
 ## 🚀 How to Start
 
-Start with the first chapter:
+Start here:
 
-➡️ **[Control Model Overview](01_control_model.md)**
+➡️ **[00_overview.md](00_overview.md)**
 
-Take your time to understand the equations and signal definitions  
-before moving on to implementation.
+Then proceed sequentially through the chapters.  
+Each section builds directly on the previous one.
 
 ---
 
-## 📌 Philosophy
+## 📌 Design Philosophy
 
-This project follows three simple rules:
+This project follows three core principles:
 
 1. **Make timing explicit**
 2. **Make arithmetic visible**
 3. **Make behavior explainable**
 
 If you understand every block in this design,  
-you understand the essence of a practical control ASIC.
+you understand the essence of a **practical control ASIC**.
 
 ---
 
 Happy learning, and enjoy building silicon.
-
 
 
