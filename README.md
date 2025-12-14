@@ -252,6 +252,16 @@ Then build the silicon.**
 
 ---
 
+## GDS Layout (OpenLane + SKY130)
+
+<img src="/docs/layout/vi_control_top_gds_overview.png" width="80%">
+
+- Tool: OpenLane (superstable)
+- PDK: SKY130A
+- Status: DRC/LVS clean, GDS generated
+
+---
+
 ## 👤 Author
 
 | 📌 Item | Details |
