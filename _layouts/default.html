@@ -23,19 +23,14 @@
 
   <!-- Mermaid -->
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-  <script> mermaid.initialize({ startOnLoad: true }); </script>
+  <script>
+    mermaid.initialize({ startOnLoad: true });
+  </script>
 </head>
 
 <body class="aitl-root">
 
-  <header class="page-header">
-    <div class="wrapper">
-      <h1 class="site-title">
-        <a href="{{ '/' | relative_url }}">{{ site.title }}</a>
-      </h1>
-      <p class="site-description">{{ site.description }}</p>
-    </div>
-  </header>
+  <!-- header intentionally removed -->
 
   <main class="wrapper main-container">
     {{ content }}
