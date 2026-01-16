@@ -157,7 +157,7 @@ This reflects **real-world ASIC development practice**.
 
 # 📄 License
 
-[![Hybrid License](https://img.shields.io/badge/license-Hybrid-blueviolet)](https://samizo-aitl.github.io/vi-control-asic-sky130//#-license)
+[![Hybrid License](https://img.shields.io/badge/license-Hybrid-blueviolet)](https://samizo-aitl.github.io/vi-control-asic-sky130/#---license)
 
 | 📌 Item | License | Description |
 |--------|---------|-------------|
