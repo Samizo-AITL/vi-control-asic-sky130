@@ -84,7 +84,7 @@ V[n], I[n]   (from external ADC)
 All technical documentation lives under `docs/`.
 
 ➡️ **Start here:**  
-👉 [Documentation Index](docs/index.md)
+👉 [**Documentation Index**](docs/index.md)
 
 The documentation is structured as a **linear design narrative**:
 
