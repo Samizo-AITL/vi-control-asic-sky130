@@ -4,78 +4,107 @@ title: "V–I Control ASIC on SKY130"
 nav_order: 1
 ---
 
-# V–I Control ASIC on SKY130  
-**PID + FSM + PWM using OpenLane (Educational & Practical)**
+# 🔋 V–I Control ASIC on SKY130  
+**PID × FSM × PWM using OpenLane**  
+*Educational & Practical Reference Design*
 
 ---
 
 ## 🔗 Official Links
 
-| Language | GitHub Pages 🌐 | GitHub 💻 |
-|----------|----------------|-----------|
+| 🌐 Language | GitHub Pages | GitHub Repository |
+|-----------|--------------|-------------------|
 | 🇺🇸 English | [![GitHub Pages EN](https://img.shields.io/badge/GitHub%20Pages-English-brightgreen?logo=github)](https://samizo-aitl.github.io/vi-control-asic-sky130/) | [![GitHub Repo EN](https://img.shields.io/badge/GitHub-English-blue?logo=github)](https://github.com/Samizo-AITL/vi-control-asic-sky130/tree/main) |
 
 ---
 
-This repository provides a **complete, reproducible, and tapeout-oriented**
+## 📌 Project Overview
+
+This repository provides a **complete, reproducible, tapeout-oriented**
 example of a **digital control ASIC** based on **Voltage–Current (V–I) feedback**.
 
-The design integrates:
-
-- **PID control** (fixed-point, deterministic)
-- **FSM-based supervision** (INIT / RUN / FAULT)
-- **PWM generation**
-- **RTL → GDS flow using OpenLane**
-- **SKY130 standard-cell technology**
-
-This is **not a tutorial fragment** or tool demo.  
-It is a **finished and verified reference ASIC design**.
+> ⚠️ This is **NOT** a tutorial fragment or tool demo.  
+> ✅ This is a **finished and verified reference ASIC design**.
 
 ---
 
-## 🎯 What This Project Is
+## 🧩 What This Project Contains
 
-This project is both:
+- 🧮 **PID control**  
+  Fixed-point, deterministic digital implementation
 
-- 📘 **Educational** — explaining *why* each design decision is made  
-- 🧩 **Practical** — showing *how* to implement a real control ASIC
+- 🧠 **FSM-based supervision**  
+  `INIT / RUN / FAULT` operational control
 
-Scope:
+- ⏱ **PWM generation**  
+  Duty-cycle and timing output
+
+- 🛠 **RTL → GDS flow**  
+  Using **OpenLane**
+
+- 🧱 **SKY130 standard-cell technology**
+
+📎 **ADC / DAC are assumed external**  
+→ This project focuses on **pure digital ASIC control logic**
+
+---
+
+## 🎯 Design Scope & Philosophy
+
+This project is designed to be both:
+
+| 📘 Educational | 🧩 Practical |
+|---------------|-------------|
+| Explains *why* design choices are made | Shows *how* to implement real silicon |
+| Control theory → hardware mapping | RTL → GDS → signoff |
+| Fixed-point methodology | Industry-grade verification |
+
+### 🔄 Design Flow
 
 ```
 Control Theory
  → Fixed-Point Arithmetic
    → RTL Design
-     → Verification
+     → Functional Verification
        → OpenLane
-         → GDS
+         → GDS (Tapeout-ready)
 ```
-
-All analog blocks (ADC / DAC) are assumed **off-chip**.  
-The focus is **pure digital ASIC control logic**.
 
 ---
 
 ## 🧠 Architecture Overview
 
+```mermaid
+flowchart TD
+    A[V[n], I[n]<br/>(External ADC)]
+    B[PID Core<br/>Fixed-point arithmetic]
+    C[FSM Supervisor<br/>INIT / RUN / FAULT]
+    D[PWM Generator]
+    E[PWM Output<br/>(to external power stage)]
+
+    A --> B
+    B -->|Control effort u[n]| C
+    C -->|Enable / Mode| D
+    D --> E
 ```
-V[n], I[n]   (from external ADC)
-   │
-   ▼
-+-----------+
-| PID Core |  Fixed-point arithmetic
-+-----------+
-     │ u[n]
-     ▼
-+-----------+
-| FSM Ctrl |  INIT / RUN / FAULT supervision
-+-----------+
-     │
-     ▼
-+-----------+
-| PWM Gen |  Duty / timing output
-+-----------+
-```
+
+---
+
+## 🧮 Control Structure Notes
+
+- **PID Core**
+  - Error calculation based on V–I feedback
+  - Fixed-point arithmetic (deterministic, synthesizable)
+  - P / I terms verified independently
+
+- **FSM Supervisor**
+  - Guards unsafe operation
+  - Handles startup, normal run, and fault states
+  - Enables / disables PWM generation
+
+- **PWM Generator**
+  - Converts control effort to duty cycle
+  - Timing verified at RTL and gate level
 
 ---
 
@@ -83,42 +112,44 @@ V[n], I[n]   (from external ADC)
 
 All technical documentation lives under `docs/`.
 
-➡️ **Start here:**  
-👉 [**Documentation Index**](docs/index.md)
+👉 **Entry point:**  
+🔗 **[Documentation Index](docs/index.md)**
 
-The documentation is structured as a **linear design narrative**:
+### Documentation Flow
 
-1. System overview and philosophy  
+1. System overview & design philosophy  
 2. Control model (PID with V–I feedback)  
 3. Fixed-point design methodology  
-4. RTL implementation  
-5. FSM supervision and PWM  
+4. RTL architecture  
+5. FSM supervision & PWM logic  
 6. OpenLane RTL-to-GDS flow  
 7. Gate-level functional verification  
-8. Appendix with complete figure index  
+8. Appendix (figures & references)
 
 ---
 
 ## ✅ Verification Status
 
-This project is **verification complete** within its defined scope.
+This project is **verification complete within its defined scope**.
 
-### Completed
+### ✔ Completed
 
-- ✅ RTL functional simulation
-- ✅ PID step response verification (P / PI)
-- ✅ FSM state transition verification
-- ✅ PWM duty and timing verification
-- ✅ Gate-level **functional** simulation (post-layout)
-- ✅ Static Timing Analysis (STA) closure
+- ✅ RTL functional simulation  
+- ✅ PID step response verification (P / PI)  
+- ✅ FSM state transition verification  
+- ✅ PWM duty & timing verification  
+- ✅ Gate-level **functional** simulation (post-layout)  
+- ✅ Static Timing Analysis (STA) closure  
 - ✅ DRC / LVS clean (OpenLane)
 
-### Intentionally Omitted
+### ⏭ Intentionally Omitted
 
-- ⏭ Gate-level **timing simulation**  
-  (STA used instead; UDP-based SKY130 models are not simulator-friendly)
+- ⛔ Gate-level **timing simulation**  
 
-This reflects **real-world ASIC development practice**.
+> STA is used instead.  
+> UDP-based SKY130 timing models are not simulator-friendly.
+
+➡️ This reflects **real-world ASIC development practice**.
 
 ---
 
@@ -130,18 +161,20 @@ This reflects **real-world ASIC development practice**.
   style="width:85%;"
 />
 
-- Tool: OpenLane
-- PDK: SKY130A
-- Status: DRC / LVS clean, GDS generated
+| Item | Details |
+|----|----|
+| Tool | OpenLane |
+| PDK | SKY130A |
+| Status | DRC / LVS clean, GDS generated |
 
 ---
 
 ## 🎓 Intended Audience
 
-- Students learning digital control and ASIC design
-- Engineers moving from MCU-based to hardware control
-- Educators building semiconductor coursework
-- Developers evaluating OpenLane + SKY130
+- 🎓 Students learning **digital control & ASIC design**
+- 🧑‍💻 Engineers transitioning from **MCU-based to hardware control**
+- 🏫 Educators building **semiconductor coursework**
+- 🧪 Developers evaluating **OpenLane + SKY130**
 
 ---
 
