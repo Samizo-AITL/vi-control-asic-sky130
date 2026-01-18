@@ -74,7 +74,7 @@ Control Theory
 
 ## 🧠 Architecture Overview
 
-```mermaid
+<div class="mermaid">
 flowchart TD
     A["Vn, In\nExternal ADC"]
     B["PID Core\nFixed-point arithmetic"]
@@ -86,7 +86,7 @@ flowchart TD
     B -->|control_u| C
     C -->|enable_mode| D
     D --> E
-```
+</div>
 
 ---
 
