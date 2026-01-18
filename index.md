@@ -76,17 +76,16 @@ Control Theory
 
 ```mermaid
 flowchart TD
-    A["V[n], I[n]\nExternal ADC"]
+    A["Vn, In\nExternal ADC"]
     B["PID Core\nFixed-point arithmetic"]
-    C["FSM Supervisor\nINIT / RUN / FAULT"]
+    C["FSM Supervisor\nINIT RUN FAULT"]
     D["PWM Generator"]
     E["PWM Output\nExternal power stage"]
 
     A --> B
-    B -->|u[n]| C
-    C -->|Enable / Mode| D
+    B -->|control_u| C
+    C -->|enable_mode| D
     D --> E
-
 ```
 
 ---
